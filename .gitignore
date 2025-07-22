@@ -1,0 +1,15 @@
+# Node.js
+node_modules/
+dist/
+build/
+.cache/
+
+# Cursor
+.cursor/
+*.log
+.vscode/
+
+# System
+.DS_Store
+Thumbs.db
+.env
