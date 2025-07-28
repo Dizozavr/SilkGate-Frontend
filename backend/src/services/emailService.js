@@ -20,4 +20,39 @@ async function sendVerificationEmail(to, link) {
   await transporter.sendMail(mailOptions);
 }
 
-module.exports = { sendVerificationEmail }; 
+async function sendPasswordResetEmail(to, link) {
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to,
+    subject: 'Восстановление пароля SilkGate',
+    html: `<p>Вы запросили восстановление пароля на SilkGate.</p>
+           <p>Для сброса пароля перейдите по ссылке:</p>
+           <a href="${link}">${link}</a>
+           <p>Если вы не запрашивали восстановление, просто проигнорируйте это письмо.</p>`
+  };
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log('Письмо для восстановления пароля отправлено:', to);
+  } catch (err) {
+    console.error('Ошибка отправки письма восстановления пароля:', err);
+    throw err;
+  }
+}
+
+async function sendMail(to, subject, html) {
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to,
+    subject,
+    html
+  };
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log('Письмо отправлено:', to, subject);
+  } catch (err) {
+    console.error('Ошибка отправки письма:', err);
+    throw err;
+  }
+}
+
+module.exports = { sendVerificationEmail, sendPasswordResetEmail, sendMail }; 

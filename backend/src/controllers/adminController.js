@@ -70,8 +70,17 @@ exports.rejectInvestor = async (req, res) => {
   res.json({ message: 'Investor rejected', investor });
 };
 
+exports.getAllInvestors = async (req, res) => {
+  try {
+    const investors = await Investor.find();
+    res.json(investors);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};
+
 exports.getPendingStartups = async (req, res) => {
-  const startups = await Startup.find({ status: 'pending' });
+  const startups = await Startup.find({ status: 'pending' }).populate('startupUserId', 'name email');
   res.json(startups);
 };
 
@@ -87,4 +96,13 @@ exports.rejectStartup = async (req, res) => {
   const startup = await Startup.findByIdAndUpdate(id, { status: 'rejected' }, { new: true });
   if (!startup) return res.status(404).json({ message: 'Startup not found' });
   res.json({ message: 'Startup rejected', startup });
+};
+
+exports.getAllStartups = async (req, res) => {
+  try {
+    const startups = await Startup.find().populate('startupUserId', 'name email');
+    res.json(startups);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
 }; 

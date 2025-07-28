@@ -11,6 +11,12 @@ async function auth(req, res, next) {
   try {
     const payload = verifyToken(token);
     req.user = payload;
+    // Если это стартап-юзер, явно проставляем роль
+    if (!req.user.role && payload.email) {
+      const StartupUser = require('../models/StartupUser');
+      const user = await StartupUser.findOne({ email: payload.email });
+      if (user) req.user.role = 'startup';
+    }
     next();
   } catch (err) {
     res.status(401).json({ message: 'Invalid or expired token' });
