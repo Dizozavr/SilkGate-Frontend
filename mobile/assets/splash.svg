@@ -1,0 +1,22 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Фоновая форма -->
+  <rect width="1024" height="1024" fill="#10182A"/>
+  
+  <!-- Центральный логотип -->
+  <g transform="translate(262, 262)">
+    <!-- Стилизованная буква S -->
+    <path d="M150 200C150 175 170 155 195 155H245C270 155 290 175 290 200C290 225 270 245 245 245H195C170 245 150 265 150 290C150 315 170 335 195 335H245C270 335 290 315 290 290" stroke="#FFD700" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+    
+    <!-- Стилизованная буква G -->
+    <path d="M325 155C350 155 370 175 370 200V290C370 315 350 335 325 335H290C265 335 245 315 245 290V245" stroke="#FFD700" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+    
+    <!-- Центральная точка -->
+    <circle cx="250" cy="250" r="25" fill="#FFD700"/>
+  </g>
+  
+  <!-- Название приложения -->
+  <text x="512" y="700" text-anchor="middle" fill="#FFD700" font-family="Arial, sans-serif" font-size="48" font-weight="bold">SilkGate</text>
+  
+  <!-- Подзаголовок -->
+  <text x="512" y="750" text-anchor="middle" fill="#bdbdbd" font-family="Arial, sans-serif" font-size="24">Платформа для стартапов и инвесторов</text>
+</svg> 

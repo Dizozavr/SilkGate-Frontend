@@ -12,7 +12,10 @@ export default function ProtectedRoute({ children, role }) {
     if (!token) return <Navigate to="/login" replace />;
   } else if (role === 'startup') {
     token = localStorage.getItem('startupToken');
-    if (!token) return <Navigate to="/startup-login" replace />;
+    if (!token) return <Navigate to="/login" replace />;
+  } else if (role === 'user') {
+    token = localStorage.getItem('userToken');
+    if (!token) return <Navigate to="/login" replace />;
   } else {
     return <Navigate to="/login" replace />;
   }
@@ -23,13 +26,15 @@ export default function ProtectedRoute({ children, role }) {
       if (role === 'admin') localStorage.removeItem('adminToken');
       if (role === 'investor') localStorage.removeItem('investorToken');
       if (role === 'startup') localStorage.removeItem('startupToken');
-      return <Navigate to={role === 'admin' ? '/admin' : role === 'startup' ? '/startup-login' : '/login'} replace />;
+      if (role === 'user') localStorage.removeItem('userToken');
+      return <Navigate to={role === 'admin' ? '/admin' : '/login'} replace />;
     }
   } catch {
     if (role === 'admin') localStorage.removeItem('adminToken');
     if (role === 'investor') localStorage.removeItem('investorToken');
     if (role === 'startup') localStorage.removeItem('startupToken');
-    return <Navigate to={role === 'admin' ? '/admin' : role === 'startup' ? '/startup-login' : '/login'} replace />;
+    if (role === 'user') localStorage.removeItem('userToken');
+    return <Navigate to={role === 'admin' ? '/admin' : '/login'} replace />;
   }
   return children;
 } 

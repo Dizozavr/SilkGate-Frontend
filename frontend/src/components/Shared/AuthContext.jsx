@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { jwtDecode } from 'jwt-decode';
 
 const AuthContext = createContext();
 
@@ -16,21 +17,53 @@ export function AuthProvider({ children }) {
     console.log('AuthContext update', { investorToken, adminToken, startupToken, userToken });
     
     if (startupToken) {
-      setToken(startupToken);
-      setRole('startup');
-      setUser({ type: 'startup' });
+      try {
+        const decoded = jwtDecode(startupToken);
+        setToken(startupToken);
+        setRole('startup');
+        setUser({ name: decoded.name || decoded.email, email: decoded.email });
+      } catch (e) {
+        localStorage.removeItem('startupToken');
+        setToken(null);
+        setRole(null);
+        setUser(null);
+      }
     } else if (investorToken) {
-      setToken(investorToken);
-      setRole('investor');
-      setUser({ type: 'investor' });
+      try {
+        const decoded = jwtDecode(investorToken);
+        setToken(investorToken);
+        setRole('investor');
+        setUser({ name: decoded.name || decoded.email, email: decoded.email });
+      } catch (e) {
+        localStorage.removeItem('investorToken');
+        setToken(null);
+        setRole(null);
+        setUser(null);
+      }
     } else if (adminToken) {
-      setToken(adminToken);
-      setRole('admin');
-      setUser({ type: 'admin' });
+      try {
+        const decoded = jwtDecode(adminToken);
+        setToken(adminToken);
+        setRole('admin');
+        setUser({ name: decoded.name || 'Admin', email: decoded.email });
+      } catch (e) {
+        localStorage.removeItem('adminToken');
+        setToken(null);
+        setRole(null);
+        setUser(null);
+      }
     } else if (userToken) {
-      setToken(userToken);
-      setRole('user');
-      setUser({ type: 'user' });
+      try {
+        const decoded = jwtDecode(userToken);
+        setToken(userToken);
+        setRole('user');
+        setUser({ name: decoded.name || decoded.email, email: decoded.email });
+      } catch (e) {
+        localStorage.removeItem('userToken');
+        setToken(null);
+        setRole(null);
+        setUser(null);
+      }
     } else {
       setToken(null);
       setRole(null);
@@ -47,11 +80,11 @@ export function AuthProvider({ children }) {
     };
     
     window.addEventListener('storage', handleStorageChange);
-    window.addEventListener('storage', updateAuthState);
+    window.addEventListener('authUpdate', updateAuthState);
     
     return () => {
       window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener('storage', updateAuthState);
+      window.removeEventListener('authUpdate', updateAuthState);
     };
   }, []);
 
@@ -76,8 +109,7 @@ export function AuthProvider({ children }) {
     // Принудительно обновляем компоненты
     setTimeout(() => {
       window.dispatchEvent(new Event('storage'));
-      // Дополнительно обновляем состояние
-      updateAuthState();
+      window.dispatchEvent(new Event('authUpdate'));
     }, 100);
   };
 
@@ -91,8 +123,51 @@ export function AuthProvider({ children }) {
     localStorage.removeItem('userToken');
   };
 
+  const checkApplicationStatus = async () => {
+    if (!token || role !== 'user') return;
+
+    try {
+      const response = await fetch('/api/users/application-status', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        
+        // Если заявка одобрена, обновляем роль
+        if (data.approvedRole) {
+          // Удаляем информацию о заявке
+          localStorage.removeItem('pendingInvestorApplication');
+          localStorage.removeItem('pendingStartupApplication');
+          
+          // Обновляем роль пользователя
+          if (data.approvedRole === 'investor') {
+            localStorage.setItem('investorToken', token);
+            localStorage.removeItem('userToken');
+            setRole('investor');
+          } else if (data.approvedRole === 'startup') {
+            localStorage.setItem('startupToken', token);
+            localStorage.removeItem('userToken');
+            setRole('startup');
+          }
+          
+          // Обновляем компоненты
+          window.dispatchEvent(new Event('authUpdate'));
+          
+          return data.approvedRole;
+        }
+      }
+    } catch (error) {
+      console.error('Ошибка при проверке статуса заявки:', error);
+    }
+    
+    return null;
+  };
+
   return (
-    <AuthContext.Provider value={{ user, token, role, login, logout }}>
+    <AuthContext.Provider value={{ user, token, role, login, logout, checkApplicationStatus }}>
       {children}
     </AuthContext.Provider>
   );

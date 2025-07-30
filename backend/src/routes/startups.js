@@ -8,6 +8,7 @@ router.post('/register', startupController.register);
 router.get('/approved', startupController.getApproved);
 router.post('/my', auth, startupController.createByStartupUser);
 router.get('/my', auth, startupController.getMyStartups);
+router.get('/search', auth, startupController.searchStartups);
 
 // Создание стартапа стартап-юзером
 router.post('/create', auth, async (req, res) => {

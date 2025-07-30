@@ -2,12 +2,14 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
+import Register from './pages/Register';
 import InvestorRegister from './pages/InvestorRegister';
 import StartupRegister from './pages/StartupRegister';
 import NotFound from './pages/NotFound';
 import AdminLogin from './pages/AdminLogin';
 import AdminPanel from './pages/AdminPanel';
-import InvestorDashboard from './pages/InvestorDashboard';
+import InvestorDashboard from './pages/InvestorDashboardNew';
+import Pricing from './pages/PricingNew';
 import ProtectedRoute from './components/ProtectedRoute';
 import { jwtDecode } from 'jwt-decode';
 import VerifyEmail from './pages/VerifyEmail';
@@ -23,7 +25,9 @@ import Footer from './components/Footer';
 import Products from './pages/Products';
 import Education from './pages/Education';
 import Success from './pages/Success';
-import Partners from './pages/Partners';
+import Chat from './pages/Chat';
+import ChatBot from './components/ChatBot/ChatBot';
+
 import Jobs from './pages/Jobs';
 import PostJob from './pages/PostJob';
 import HRPartner from './pages/HRPartner';
@@ -31,7 +35,14 @@ import FAQ from './pages/FAQ';
 import About from './pages/About';
 import Docs from './pages/Docs';
 import News from './pages/News';
+import NewsDetail from './pages/NewsDetail';
+import Terms from './pages/Terms';
+import Privacy from './pages/Privacy';
+import Contacts from './pages/Contacts';
 import UserDashboard from './pages/UserDashboard';
+import UserProfile from './pages/UserProfile';
+import InvestorApplication from './pages/InvestorApplication';
+import StartupApplication from './pages/StartupApplication';
 
 function AppRoutes() {
   const location = useLocation();
@@ -53,6 +64,7 @@ function AppRoutes() {
   const investorToken = localStorage.getItem('investorToken');
   const adminToken = localStorage.getItem('adminToken');
   const startupToken = localStorage.getItem('startupToken');
+  const userToken = localStorage.getItem('userToken');
   if (investorToken) {
     try {
       const decoded = jwtDecode(investorToken);
@@ -74,6 +86,13 @@ function AppRoutes() {
       role = 'startup';
       name = decoded.name || decoded.email;
     } catch {}
+  } else if (userToken) {
+    try {
+      const decoded = jwtDecode(userToken);
+      user = decoded;
+      role = 'user';
+      name = decoded.name || decoded.email;
+    } catch {}
   }
 
   function handleLogout() {
@@ -85,7 +104,10 @@ function AppRoutes() {
       window.location.href = '/admin';
     } else if (role === 'startup') {
       localStorage.removeItem('startupToken');
-      window.location.href = '/startup-login';
+      window.location.href = '/login';
+    } else if (role === 'user') {
+      localStorage.removeItem('userToken');
+      window.location.href = '/login';
     }
   }
 
@@ -95,6 +117,7 @@ function AppRoutes() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/investor-register" element={<InvestorRegister />} />
         <Route path="/startup-register" element={<StartupUserRegister />} />
         <Route path="/admin" element={<AdminLogin />} />
@@ -106,11 +129,12 @@ function AppRoutes() {
         <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/startup-verify-email/:token" element={<VerifyStartupEmail />} />
         <Route path="/projects" element={<Products />} />
+        <Route path="/pricing" element={<Pricing />} />
         <Route path="/education" element={<Education />} />
         <Route path="/education/seminars" element={<Education />} />
         <Route path="/education/calendar" element={<Education />} />
         <Route path="/success" element={<Success />} />
-        <Route path="/partners" element={<Partners />} />
+
         <Route path="/jobs" element={<Jobs />} />
         <Route path="/jobs/post" element={<PostJob />} />
         <Route path="/jobs/hr" element={<HRPartner />} />
@@ -118,10 +142,19 @@ function AppRoutes() {
         <Route path="/about" element={<About />} />
         <Route path="/docs" element={<Docs />} />
         <Route path="/news" element={<News />} />
+        <Route path="/news/:id" element={<NewsDetail />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/contacts" element={<Contacts />} />
         <Route path="/user-dashboard" element={<ProtectedRoute role="user"><UserDashboard /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute role="user"><UserProfile /></ProtectedRoute>} />
+        <Route path="/investor-application" element={<ProtectedRoute role="user"><InvestorApplication /></ProtectedRoute>} />
+        <Route path="/startup-application" element={<ProtectedRoute role="user"><StartupApplication /></ProtectedRoute>} />
+        <Route path="/chat" element={<ProtectedRoute role={['investor', 'startup', 'admin']}><Chat /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
+      <ChatBot />
     </>
   );
 }

@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useAuth } from '../Shared/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const ROLES = [
   { value: 'investor', label: 'Инвестор' },
@@ -7,6 +9,8 @@ const ROLES = [
 ];
 
 export default function RegisterForm({ onSuccess, onSwitchToLogin }) {
+  const { login } = useAuth();
+  const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -48,10 +52,80 @@ export default function RegisterForm({ onSuccess, onSwitchToLogin }) {
         return;
       }
       setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
-        if (onSuccess) onSuccess();
-      }, 1000);
+      
+      // Отправляем данные на сервер
+      const registerUser = async () => {
+        try {
+          const name = `${firstName} ${lastName}`;
+          let url = '';
+          let userData = { name, email, password };
+          
+          // Выбираем правильный endpoint в зависимости от роли
+          if (role === 'user') {
+            url = 'http://localhost:5000/api/users/register';
+          } else if (role === 'investor') {
+            url = 'http://localhost:5000/api/investors/register';
+          } else if (role === 'startup') {
+            url = 'http://localhost:5000/api/startup-users/register';
+          }
+          
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userData),
+          });
+          
+          const data = await response.json();
+          
+          if (!response.ok) {
+            throw new Error(data.message || 'Ошибка регистрации');
+          }
+          
+          // После успешной регистрации автоматически входим
+          const loginResponse = await fetch('http://localhost:5000/api/auth/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password }),
+          });
+          
+          const loginData = await loginResponse.json();
+          
+          if (!loginResponse.ok) {
+            throw new Error(loginData.message || 'Ошибка входа');
+          }
+          
+          // Сохраняем токен и авторизуем пользователя
+          login({ name, email }, loginData.token, loginData.role);
+          
+          // Определяем редирект в зависимости от роли
+          let redirect = '/';
+          if (loginData.role === 'investor') {
+            redirect = '/investor-dashboard';
+          } else if (loginData.role === 'startup') {
+            redirect = '/startup-dashboard';
+          } else if (loginData.role === 'user') {
+            redirect = '/user-dashboard';
+          } else if (loginData.role === 'admin') {
+            redirect = '/admin-panel';
+          }
+          
+          // Закрываем модальное окно и перенаправляем
+          if (onSuccess) onSuccess();
+          setTimeout(() => {
+            navigate(redirect);
+          }, 500);
+          
+        } catch (err) {
+          setError(err.message);
+          setLoading(false);
+        }
+      };
+      
+      registerUser();
     }
   };
 
@@ -63,7 +137,7 @@ export default function RegisterForm({ onSuccess, onSwitchToLogin }) {
 
   return (
     <div
-      className="w-full flex flex-col items-center bg-white relative"
+              className="w-full flex flex-col items-center bg-white relative auth-form"
       style={{
         maxWidth: 420,
         minWidth: 320,

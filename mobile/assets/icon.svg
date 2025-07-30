@@ -1,0 +1,23 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Фоновая форма -->
+  <rect width="1024" height="1024" rx="200" fill="#10182A"/>
+  
+  <!-- Стилизованная буква S -->
+  <path d="M300 400C300 350 340 310 390 310H490C540 310 580 350 580 400C580 450 540 490 490 490H390C340 490 300 530 300 580C300 630 340 670 390 670H490C540 670 580 630 580 580" stroke="#FFD700" stroke-width="60" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Стилизованная буква G -->
+  <path d="M650 310C700 310 740 350 740 400V580C740 630 700 670 650 670H580C530 670 490 630 490 580V490" stroke="#FFD700" stroke-width="60" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Центральная точка -->
+  <circle cx="512" cy="512" r="50" fill="#FFD700"/>
+  
+  <!-- Декоративные элементы -->
+  <path d="M250 250L774 774" stroke="#FFD700" stroke-width="20" opacity="0.2"/>
+  <path d="M774 250L250 774" stroke="#FFD700" stroke-width="20" opacity="0.2"/>
+  
+  <!-- Дополнительные декоративные точки -->
+  <circle cx="250" cy="250" r="25" fill="#FFD700" opacity="0.3"/>
+  <circle cx="774" cy="250" r="25" fill="#FFD700" opacity="0.3"/>
+  <circle cx="250" cy="774" r="25" fill="#FFD700" opacity="0.3"/>
+  <circle cx="774" cy="774" r="25" fill="#FFD700" opacity="0.3"/>
+</svg> 

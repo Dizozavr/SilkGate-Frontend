@@ -45,6 +45,8 @@ export default function Landing() {
     <div className="min-h-screen bg-[#10182A] flex flex-col items-center">
       {/* Hero-блок */}
       <div className="flex flex-col items-center mt-20 mb-14 w-full">
+        
+        
         <h1
           className="text-4xl md:text-5xl font-extrabold mb-2 leading-[1.1] text-white text-center mx-auto"
           style={{ fontFamily: 'Playfair Display, serif', maxWidth: '900px' }}

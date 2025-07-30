@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useToast } from '../Shared/ToastProvider';
 import { auth, googleProvider } from '../../firebase';
 import { signInWithPopup } from 'firebase/auth';
+import { useAuth } from '../Shared/AuthContext';
 
 export default function LoginForm({ onForgot, onRegister, onSuccess }) {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -9,6 +10,7 @@ export default function LoginForm({ onForgot, onRegister, onSuccess }) {
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const toast = useToast();
+  const { login } = useAuth();
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -46,8 +48,27 @@ export default function LoginForm({ onForgot, onRegister, onSuccess }) {
       else if (data.role === 'admin') tokenKey = 'adminToken';
       else if (data.role === 'user') tokenKey = 'userToken';
       localStorage.setItem(tokenKey, data.token);
+      
+      // Обновляем AuthContext
+      login({ name: data.name || data.email, email: data.email }, data.token, data.role);
+      
       toast.showToast('Вход выполнен успешно', 'success');
+      
+      // Определяем редирект
+      let redirect = '/';
+      if (data.role === 'investor') redirect = '/investor-dashboard';
+      else if (data.role === 'startup') redirect = '/startup-dashboard';
+      else if (data.role === 'admin') redirect = '/admin-panel';
+      else if (data.role === 'user') redirect = '/user-dashboard';
+      
       if (onSuccess) onSuccess(data.role);
+      
+              if (onSuccess) onSuccess(data.role);
+        
+        // Принудительно обновляем страницу и редиректим
+        setTimeout(() => {
+          window.location.href = redirect;
+        }, 1000);
     } catch (err) {
       toast.showToast(err.message || 'Ошибка входа', 'error');
       setErrors({ password: err.message || 'Ошибка входа' });
@@ -75,31 +96,33 @@ export default function LoginForm({ onForgot, onRegister, onSuccess }) {
         minWidth: 320,
         borderRadius: 16,
         padding: '48px 40px',
-        fontFamily:
-          '-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif',
+                    fontFamily: 'Inter, sans-serif',
+            fontWeight: 400,
         boxShadow: 'none',
       }}
     >
       <div className="w-full flex flex-col items-start mt-2 mb-8" style={{ marginLeft: 0 }}>
-        <h2
-          className="mb-2"
-          style={{
-            fontSize: '2rem',
-            fontWeight: 400,
+                    <h2
+              className="mb-2"
+              style={{
+                fontSize: '2rem',
+                            fontWeight: 300,
             lineHeight: 1.2,
             letterSpacing: 0,
             color: '#222',
             marginBottom: 8,
-          }}
-        >
-          Добро пожаловать!
-        </h2>
+            fontFamily: 'Playfair Display, serif',
+            fontStyle: 'normal',
+              }}
+            >
+              Добро пожаловать!
+            </h2>
         <div
           className="mb-2"
           style={{
             color: '#6b7280',
             fontSize: '1rem',
-            fontWeight: 400,
+            fontWeight: 300,
             lineHeight: 1.5,
             maxWidth: 340,
           }}
@@ -115,18 +138,19 @@ export default function LoginForm({ onForgot, onRegister, onSuccess }) {
           width: '100%',
           borderRadius: 8,
           padding: '12px 16px',
-          fontWeight: 500,
-          fontSize: '1rem',
-          minHeight: 48,
-          background: '#000',
-          color: '#fff',
-          marginBottom: 24,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: 8,
-          border: 'none',
-          cursor: 'pointer',
+                      fontWeight: 500,
+            fontSize: '1rem',
+            minHeight: 48,
+            background: '#000',
+            color: '#fff',
+            marginBottom: 24,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 8,
+            border: 'none',
+            cursor: 'pointer',
+            fontFamily: 'Inter, sans-serif',
         }}
       >
         <img src="/Google__G__logo.svg.png" alt="Google" style={{ height: 20, width: 20 }} /> Войти через Google
@@ -152,7 +176,7 @@ export default function LoginForm({ onForgot, onRegister, onSuccess }) {
             outline: 'none',
             width: '100%',
             minHeight: 48,
-            fontWeight: 400,
+            fontWeight: 300,
             color: '#222',
             boxSizing: 'border-box',
           }}
@@ -174,7 +198,7 @@ export default function LoginForm({ onForgot, onRegister, onSuccess }) {
               outline: 'none',
               width: '100%',
               minHeight: 48,
-              fontWeight: 400,
+              fontWeight: 300,
               color: '#222',
               boxSizing: 'border-box',
               paddingRight: 44,

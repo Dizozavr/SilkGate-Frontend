@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate 50 Tech News Images</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background: #f5f5f5;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .controls {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .btn {
+            background: #FFD700;
+            color: #10182A;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+        .btn:hover {
+            background: #FFC700;
+        }
+        .container { 
+            display: grid; 
+            grid-template-columns: repeat(5, 1fr); 
+            gap: 15px; 
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        .placeholder { 
+            width: 300px; 
+            height: 200px; 
+            border-radius: 12px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: white; 
+            font-size: 18px; 
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+        .placeholder:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+        }
+        .gradient1 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .gradient2 { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .gradient3 { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .gradient4 { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .gradient5 { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .gradient6 { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+        .gradient7 { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); }
+        .gradient8 { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
+        .gradient9 { background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%); }
+        .gradient10 { background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); }
+        
+        .icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            opacity: 0.7;
+        }
+        
+        .download-all {
+            background: #10182A;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 20px;
+        }
+        .download-all:hover {
+            background: #1a2238;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎯 Tech News Image Generator</h1>
+        <p>Generate 50 beautiful tech-themed images for news articles</p>
+    </div>
+    
+    <div class="controls">
+        <button class="btn" onclick="downloadAll()">📥 Download All Images</button>
+        <button class="btn" onclick="generateAll()">🔄 Regenerate All</button>
+    </div>
+    
+    <div class="container" id="container">
+        <!-- Images will be generated here -->
+    </div>
+
+    <script>
+        const gradients = [
+            'gradient1', 'gradient2', 'gradient3', 'gradient4', 'gradient5',
+            'gradient6', 'gradient7', 'gradient8', 'gradient9', 'gradient10'
+        ];
+
+        const techThemes = [
+            'AI & Neural Networks', 'Startup Innovation', 'Digital Transformation',
+            'Cloud Computing', 'Mobile Technology', 'Blockchain & Crypto',
+            'Virtual Reality', 'IoT & Smart Devices', 'Cybersecurity', 'Fintech',
+            'Healthcare Tech', 'E-commerce', 'Social Media', 'Gaming', 'Education Tech',
+            'Transportation', 'Energy & Green Tech', 'Space Technology', 'Biotech', 'Robotics',
+            'Data Analytics', 'Machine Learning', 'Quantum Computing', 'Augmented Reality', '5G Networks',
+            'Smart Cities', 'Digital Marketing', 'Video Streaming', 'Music Tech', 'Fitness Tech',
+            'Real Estate Tech', 'Travel Tech', 'Food Tech', 'Fashion Tech', 'Entertainment',
+            'Workplace Tech', 'Communication', 'Productivity Tools', 'Creative Tech', 'Social Impact',
+            'Financial Services', 'Insurance Tech', 'Legal Tech', 'Government Tech', 'Non-profit Tech',
+            'Environmental Tech', 'Agricultural Tech', 'Manufacturing Tech', 'Retail Tech', 'Logistics Tech'
+        ];
+
+        const icons = ['⚡', '🚀', '💻', '🔗', '🌐', '📱', '🎮', '🏥', '💰', '🔒', 
+                      '🎯', '📊', '🤖', '🧠', '☁️', '🔮', '🎨', '📈', '🌍', '🔬',
+                      '🚗', '⚡', '🛰️', '🧬', '🤖', '📊', '🎓', '🎵', '💪', '🏠',
+                      '✈️', '🍕', '👗', '🎬', '💼', '📞', '⚙️', '🎭', '🤝', '🏦',
+                      '🛡️', '⚖️', '🏛️', '❤️', '🌱', '🚜', '🏭', '🛍️', '📦'];
+
+        function generateImages() {
+            const container = document.getElementById('container');
+            container.innerHTML = '';
+            
+            for (let i = 1; i <= 50; i++) {
+                const div = document.createElement('div');
+                div.className = `placeholder ${gradients[(i-1) % gradients.length]}`;
+                div.innerHTML = `
+                    <div class="icon">${icons[i-1]}</div>
+                    <div>
+                        <div style="font-size: 24px; margin-bottom: 10px;">Tech ${i}</div>
+                        <div style="font-size: 14px; opacity: 0.9; max-width: 250px;">${techThemes[i-1]}</div>
+                    </div>
+                `;
+                div.onclick = () => downloadImage(i);
+                container.appendChild(div);
+            }
+        }
+
+        function downloadImage(index) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 300;
+            canvas.height = 200;
+            
+            // Get gradient colors
+            const gradientClass = gradients[(index-1) % gradients.length];
+            let color1, color2;
+            
+            switch(gradientClass) {
+                case 'gradient1': color1 = '#667eea'; color2 = '#764ba2'; break;
+                case 'gradient2': color1 = '#f093fb'; color2 = '#f5576c'; break;
+                case 'gradient3': color1 = '#4facfe'; color2 = '#00f2fe'; break;
+                case 'gradient4': color1 = '#43e97b'; color2 = '#38f9d7'; break;
+                case 'gradient5': color1 = '#fa709a'; color2 = '#fee140'; break;
+                case 'gradient6': color1 = '#a8edea'; color2 = '#fed6e3'; break;
+                case 'gradient7': color1 = '#ff9a9e'; color2 = '#fecfef'; break;
+                case 'gradient8': color1 = '#ffecd2'; color2 = '#fcb69f'; break;
+                case 'gradient9': color1 = '#ff9a9e'; color2 = '#fad0c4'; break;
+                case 'gradient10': color1 = '#a18cd1'; color2 = '#fbc2eb'; break;
+            }
+            
+            // Create gradient
+            const gradient = ctx.createLinearGradient(0, 0, 300, 200);
+            gradient.addColorStop(0, color1);
+            gradient.addColorStop(1, color2);
+            
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 300, 200);
+            
+            // Add icon
+            ctx.fillStyle = 'rgba(255,255,255,0.7)';
+            ctx.font = '24px Arial';
+            ctx.textAlign = 'right';
+            ctx.fillText(icons[index-1], 270, 40);
+            
+            // Add text
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 24px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(`Tech ${index}`, 150, 90);
+            
+            ctx.font = '14px Arial';
+            ctx.fillText(techThemes[index-1], 150, 120);
+            
+            // Download
+            const link = document.createElement('a');
+            link.download = `tech${index}.jpg`;
+            link.href = canvas.toDataURL('image/jpeg', 0.9);
+            link.click();
+        }
+
+        function downloadAll() {
+            for (let i = 1; i <= 50; i++) {
+                setTimeout(() => downloadImage(i), i * 100);
+            }
+        }
+
+        function generateAll() {
+            generateImages();
+        }
+
+        // Initialize
+        generateImages();
+    </script>
+</body>
+</html> 

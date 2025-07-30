@@ -1,5 +1,6 @@
 const Investor = require('../models/Investor');
 const Admin = require('../models/Admin');
+const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const { signToken } = require('../utils/jwt');
 const StartupUser = require('../models/StartupUser');
@@ -22,6 +23,10 @@ exports.login = async (req, res) => {
       role = 'investor';
     }
     if (!user) {
+      user = await User.findOne({ email });
+      role = 'user';
+    }
+    if (!user) {
       user = await Admin.findOne({ email });
       role = 'admin';
     }
@@ -39,7 +44,7 @@ exports.login = async (req, res) => {
       return res.status(403).json({ message: 'Account not verified.' });
     }
     const token = signToken(role === 'investor' ? { id: user._id, role, name: user.name, email: user.email } : { id: user._id, role });
-    res.json({ token, role });
+    res.json({ token, role, name: user.name, email: user.email });
   } catch (err) {
     res.status(500).json({ message: 'Server error', error: err.message });
   }
@@ -56,6 +61,10 @@ exports.forgotPassword = async (req, res) => {
     if (!user) {
       user = await StartupUser.findOne({ email });
       userType = 'StartupUser';
+    }
+    if (!user) {
+      user = await User.findOne({ email });
+      userType = 'User';
     }
     if (!user) {
       return res.status(404).json({ message: 'Такой email не зарегистрирован' });
@@ -89,7 +98,7 @@ exports.resetPassword = async (req, res) => {
     if (!resetToken || resetToken.expiresAt < new Date()) {
       return res.status(400).json({ message: 'Токен недействителен или истёк.' });
     }
-    const UserModel = userType === 'Investor' ? Investor : StartupUser;
+    const UserModel = userType === 'Investor' ? Investor : userType === 'StartupUser' ? StartupUser : User;
     const user = await UserModel.findById(resetToken.userId);
     if (!user) {
       return res.status(404).json({ message: 'Пользователь не найден.' });
