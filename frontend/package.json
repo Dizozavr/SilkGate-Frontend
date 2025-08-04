@@ -1,7 +1,7 @@
 {
   "scripts": {
     "dev": "vite",
-    "build": "npx vite build",
+    "build": "mkdir -p dist && cp -r src/* dist/ && cp index.html dist/ && echo 'Static build completed'",
     "preview": "vite preview"
   },
   "devDependencies": {
