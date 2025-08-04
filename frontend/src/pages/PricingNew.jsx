@@ -1,414 +1,241 @@
-import React, { useState, useEffect } from 'react';
-import PaymentForm from '../components/PaymentForm';
+import React from 'react';
+import Icon from '../components/Shared/Icon';
 
-const PricingNew = () => {
-  const [userType, setUserType] = useState('investor');
-  const [plans, setPlans] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedPlan, setSelectedPlan] = useState(null);
-  const [showPaymentForm, setShowPaymentForm] = useState(false);
-  const [period, setPeriod] = useState('monthly');
-
-  // Статические планы для инвесторов
-  const getStaticInvestorPlans = () => [
+export default function PricingNew() {
+  const plans = [
     {
-      id: 'investor_free',
-      name: 'Free',
-      price: { monthly: 0, yearly: 0 },
+      id: 'basic',
+      name: 'Базовый',
+      price: 'Бесплатно',
+      period: '',
+      description: 'Для начинающих инвесторов и стартапов',
       features: [
-        '2 просмотра проектов в день',
-        'Базовый поиск стартапов',
-        'Доступ к новостям',
-        'Подписка на рассылку'
+        'Доступ к базовому каталогу стартапов',
+        'Ограниченная аналитика',
+        'Базовые инструменты поиска',
+        'Email поддержка'
       ],
-      buttonVariant: 'secondary',
-      popular: false
-    },
-    {
-      id: 'investor_pro',
-      name: 'Pro',
-      price: { monthly: 19, yearly: 190 },
-      features: [
-        'Неограниченный просмотр проектов',
-        'Контакты стартапов',
-        'Экспорт данных в Excel',
-        'Приоритетная поддержка',
-        'Расширенная аналитика',
-        'Уведомления о новых проектах'
-      ],
-      buttonVariant: 'primary',
-      popular: true
-    },
-    {
-      id: 'investor_partner_plus',
-      name: 'Partner+',
-      price: { monthly: 49, yearly: 490 },
-      features: [
-        'Все функции Pro',
-        'Доступ к приватным сделкам',
-        'Персональный менеджер',
-        'API доступ',
-        'Кастомные отчеты',
-        'Приоритетное размещение',
-        'Эксклюзивные мероприятия'
-      ],
-      buttonVariant: 'premium',
-      popular: false
-    }
-  ];
-
-  // Статические планы для стартапов
-  const getStaticStartupPlans = () => [
-    {
-      id: 'startup_free',
-      name: 'Free',
-      price: { monthly: 0, yearly: 0 },
-      features: [
-        'Базовое размещение проекта',
-        'Ограниченная статистика (5 просмотров/день)',
-        'Стандартная поддержка',
-        '1 обновление проекта в месяц'
-      ],
-      buttonVariant: 'secondary',
-      popular: false
-    },
-    {
-      id: 'startup_starter',
-      name: 'Starter',
-      price: { monthly: 15, yearly: 150 },
-      features: [
-        'Приоритетное размещение в топе',
-        'Расширенная статистика (50 просмотров/день)',
-        'Неограниченные обновления проекта',
-        'Приоритетная поддержка',
-        'Дополнительные материалы для презентации',
-        'Уведомления о просмотрах профиля',
-        'Скидка 50% для стартапов до 1 года'
-      ],
-      buttonVariant: 'primary',
-      popular: true,
-      discounts: {
-        startup_age_months: 12,
-        discount_percent: 50
-      }
-    },
-    {
-      id: 'startup_premium',
-      name: 'Premium',
-      price: { monthly: 29, yearly: 290 },
-      features: [
-        'Все функции Starter',
-        'Неограниченная статистика',
-        'Экспорт данных в Excel',
-        'API доступ',
-        'Кастомные отчеты',
-        'Интеграция с CRM',
-        'Уведомления о заинтересованных инвесторах',
-        'Скидка 30% для стартапов до 2 лет'
-      ],
-      buttonVariant: 'premium',
       popular: false,
-      discounts: {
-        startup_age_months: 24,
-        discount_percent: 30
-      }
+      icon: 'user'
     },
     {
-      id: 'startup_enterprise',
-      name: 'Enterprise',
-      price: { monthly: 99, yearly: 990 },
+      id: 'professional',
+      name: 'Профессиональный',
+      price: '$99',
+      period: '/месяц',
+      description: 'Для активных участников экосистемы',
       features: [
-        'Все функции Premium',
-        'Персональный менеджер',
-        'Эксклюзивные мероприятия',
-        'Прямые контакты с инвесторами',
-        'Белый лейбл',
-        'Кастомные интеграции',
-        'Приоритетная поддержка 24/7',
-        'Аналитика конкурентов'
+        'Полный доступ к каталогу стартапов',
+        'Расширенная аналитика и отчеты',
+        'Продвинутые инструменты поиска',
+        'Приоритетная поддержка',
+        'Доступ к образовательным материалам',
+        'Возможность размещения вакансий'
       ],
-      buttonVariant: 'premium',
-      popular: false
+      popular: true,
+      icon: 'award'
+    },
+    {
+      id: 'enterprise',
+      name: 'Корпоративный',
+      price: '$299',
+      period: '/месяц',
+      description: 'Для крупных инвесторов и компаний',
+      features: [
+        'Все функции Профессионального плана',
+        'Персональный менеджер',
+        'API доступ для интеграций',
+        'Кастомные отчеты и аналитика',
+        'Приоритетное размещение в каталоге',
+        'Эксклюзивные мероприятия',
+        'Консультации экспертов'
+      ],
+      popular: false,
+      icon: 'database'
     }
   ];
 
-  // Определяем тип пользователя
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      try {
-        const decoded = JSON.parse(atob(token.split('.')[1]));
-        if (decoded.role === 'startup') {
-          setUserType('startup');
-        } else if (decoded.role === 'investor') {
-          setUserType('investor');
-        }
-      } catch (error) {
-        console.log('Не удалось определить тип пользователя');
-      }
+  const features = [
+    {
+      title: 'Каталог стартапов',
+      basic: 'Ограниченный',
+      professional: 'Полный доступ',
+      enterprise: 'Полный доступ + приоритет'
+    },
+    {
+      title: 'Аналитика и отчеты',
+      basic: 'Базовые',
+      professional: 'Расширенные',
+      enterprise: 'Кастомные'
+    },
+    {
+      title: 'Поддержка',
+      basic: 'Email',
+      professional: 'Приоритетная',
+      enterprise: 'Персональный менеджер'
+    },
+    {
+      title: 'API доступ',
+      basic: 'Нет',
+      professional: 'Нет',
+      enterprise: 'Да'
+    },
+    {
+      title: 'Образовательные материалы',
+      basic: 'Ограниченные',
+      professional: 'Полные',
+      enterprise: 'Эксклюзивные'
     }
-  }, []);
-
-  // Загружаем планы с сервера
-  useEffect(() => {
-    const fetchPlans = async () => {
-      try {
-        const response = await fetch(`/api/subscriptions/plans?userType=${userType}`);
-        if (response.ok) {
-          const data = await response.json();
-          setPlans(data);
-        } else {
-          // Используем статические планы если API недоступен
-          setPlans(userType === 'startup' ? getStaticStartupPlans() : getStaticInvestorPlans());
-        }
-      } catch (error) {
-        console.log('Используем статические планы');
-        setPlans(userType === 'startup' ? getStaticStartupPlans() : getStaticInvestorPlans());
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPlans();
-  }, [userType]);
-
-  const getPrice = (plan) => {
-    const price = period === 'monthly' ? plan.price.monthly : plan.price.yearly;
-    return price === 0 ? 'Бесплатно' : `$${price}`;
-  };
-
-  const getPeriod = () => {
-    return period === 'monthly' ? 'месяц' : 'год';
-  };
-
-  const handlePlanSelect = (plan) => {
-    setSelectedPlan(plan);
-    setShowPaymentForm(true);
-  };
-
-  const handlePaymentSuccess = () => {
-    setShowPaymentForm(false);
-    setSelectedPlan(null);
-    // Здесь можно добавить редирект или уведомление
-  };
-
-  const handlePaymentCancel = () => {
-    setShowPaymentForm(false);
-    setSelectedPlan(null);
-  };
-
-  const getDiscountedPrice = (plan) => {
-    if (!plan.discounts || !plan.discounts.discount_percent) {
-      return getPrice(plan);
-    }
-    
-    const originalPrice = period === 'monthly' ? plan.price.monthly : plan.price.yearly;
-    const discountedPrice = originalPrice * (1 - plan.discounts.discount_percent / 100);
-    
-    return `$${Math.round(discountedPrice)}`;
-  };
-
-  const getDiscountBadge = (plan) => {
-    if (!plan.discounts || !plan.discounts.discount_percent) {
-      return null;
-    }
-    
-    return (
-      <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-        <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
-          -{plan.discounts.discount_percent}%
-        </span>
-      </div>
-    );
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#10182A] flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-300">Загружаем планы...</p>
-        </div>
-      </div>
-    );
-  }
+  ];
 
   return (
-    <div className="min-h-screen bg-[#10182A] py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#10182A] pt-20">
+      <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Заголовок */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-white mb-4">
-            Выберите подходящий план
+          <h1 className="text-3xl md:text-4xl font-light text-white mb-4">
+            Тарифные планы
           </h1>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-            Начните бесплатно и масштабируйтесь по мере роста вашего бизнеса
+          <p className="text-lg text-muted font-light max-w-2xl mx-auto leading-tight">
+            Выберите подходящий план для доступа к нашим продуктам и услугам. 
+            Все планы включают базовый функционал и масштабируются под ваши потребности.
           </p>
         </div>
-
-        {/* Переключатель типа пользователя */}
-        <div className="flex justify-center mb-8">
-          <div className="bg-gray-800 rounded-lg p-1 shadow-sm border border-gray-700">
-            <button
-              onClick={() => setUserType('investor')}
-              className={`px-6 py-2 rounded-md font-medium transition-colors ${
-                userType === 'investor'
-                  ? 'bg-blue-600 text-white'
-                  : 'text-gray-300 hover:text-white'
-              }`}
-            >
-              Для инвесторов
-            </button>
-            <button
-              onClick={() => setUserType('startup')}
-              className={`px-6 py-2 rounded-md font-medium transition-colors ${
-                userType === 'startup'
-                  ? 'bg-blue-600 text-white'
-                  : 'text-gray-300 hover:text-white'
-              }`}
-            >
-              Для стартапов
-            </button>
-          </div>
-        </div>
-
-        {/* Переключатель периода */}
-        <div className="flex justify-center mb-8">
-          <div className="bg-gray-800 rounded-lg p-1 shadow-sm border border-gray-700">
-            <button
-              onClick={() => setPeriod('monthly')}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                period === 'monthly'
-                  ? 'bg-blue-600 text-white'
-                  : 'text-gray-300 hover:text-white'
-              }`}
-            >
-              Ежемесячно
-            </button>
-            <button
-              onClick={() => setPeriod('yearly')}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                period === 'yearly'
-                  ? 'bg-blue-600 text-white'
-                  : 'text-gray-300 hover:text-white'
-              }`}
-            >
-              Ежегодно
-              <span className="ml-1 text-xs bg-green-600 text-white px-2 py-1 rounded">
-                Экономия
-              </span>
-            </button>
-          </div>
-        </div>
-
-        {/* Карточки планов */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        
+        {/* Тарифные планы */}
+        <div className="grid md:grid-cols-3 gap-8 mb-16">
           {plans.map((plan) => (
             <div
               key={plan.id}
-              className={`relative bg-white rounded-xl shadow-lg border-2 transition-all duration-300 hover:shadow-xl ${
-                plan.popular ? 'border-blue-500 scale-105' : 'border-gray-200 hover:border-blue-300'
-              }`}
+              className={`relative bg-white rounded-lg shadow-sm border ${
+                plan.popular 
+                  ? 'border-blue-600 ring-2 ring-blue-600/20' 
+                  : 'border-gray-200'
+              } p-8`}
             >
-              {getDiscountBadge(plan)}
-              
               {plan.popular && (
-                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                  <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                  <span className="bg-blue-600 text-white px-4 py-1 rounded-full text-xs font-light">
                     Популярный
                   </span>
                 </div>
               )}
-
-              <div className="p-6">
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
-                
-                <div className="mb-6">
-                  <div className="flex items-baseline">
-                    <span className="text-4xl font-bold text-gray-900">
-                      {getDiscountedPrice(plan)}
-                    </span>
-                    {plan.price.monthly > 0 && (
-                      <span className="text-gray-500 ml-2">/{getPeriod()}</span>
-                    )}
+              
+              <div className="text-center mb-8">
+                <div className="flex items-center justify-center mb-4">
+                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <Icon name={plan.icon} size={24} />
                   </div>
-                  {plan.discounts && plan.discounts.discount_percent > 0 && (
-                    <div className="text-sm text-gray-500 mt-1">
-                      <span className="line-through">
-                        ${period === 'monthly' ? plan.price.monthly : plan.price.yearly}
-                      </span>
-                      <span className="ml-2 text-green-600 font-medium">
-                        Экономия {plan.discounts.discount_percent}%
-                      </span>
-                    </div>
+                </div>
+                <h3 className="text-xl font-light text-gray-900 mb-2">{plan.name}</h3>
+                <p className="text-gray-600 text-sm font-light leading-tight mb-4">
+                  {plan.description}
+                </p>
+                <div className="mb-6">
+                  <span className="text-3xl font-light text-gray-900">{plan.price}</span>
+                  {plan.period && (
+                    <span className="text-gray-600 text-sm font-light">{plan.period}</span>
                   )}
                 </div>
-
-                <ul className="space-y-3 mb-8">
-                  {plan.features.map((feature, index) => (
-                    <li key={index} className="flex items-start">
-                      <svg
-                        className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span className="text-gray-700">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <button
-                  onClick={() => handlePlanSelect(plan)}
-                  className={`w-full py-3 px-4 rounded-lg font-semibold transition-colors ${
-                    plan.buttonVariant === 'secondary'
-                      ? 'bg-gray-100 text-gray-900 hover:bg-gray-200'
-                      : plan.buttonVariant === 'premium'
-                      ? 'bg-purple-600 text-white hover:bg-purple-700'
-                      : 'bg-blue-600 text-white hover:bg-blue-700'
-                  }`}
-                >
-                  {plan.price.monthly === 0 ? 'Начать бесплатно' : 'Выбрать план'}
-                </button>
               </div>
+              
+              <ul className="space-y-4 mb-8">
+                {plan.features.map((feature, index) => (
+                  <li key={index} className="flex items-start gap-3">
+                    <Icon name="check" size={16} className="text-green-500 mt-0.5 flex-shrink-0" />
+                    <span className="text-sm font-light text-gray-600 leading-tight">
+                      {feature}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              
+              <button
+                className={`w-full py-3 px-6 rounded-lg font-light transition-colors ${
+                  plan.popular
+                    ? 'bg-blue-600 text-white hover:bg-blue-700'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                {plan.id === 'basic' ? 'Начать бесплатно' : 'Выбрать план'}
+              </button>
             </div>
           ))}
         </div>
-
-        {/* Дополнительная информация */}
-        <div className="mt-16 text-center">
-          <h2 className="text-2xl font-bold text-white mb-4">
-            Вопросы по тарифам?
+        
+        {/* Сравнение функций */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 mb-12">
+          <h2 className="text-xl font-light text-gray-900 mb-8 text-center">
+            Сравнение функций
           </h2>
-          <p className="text-gray-300 mb-6">
-            Наша команда готова помочь выбрать оптимальный план для вашего бизнеса
-          </p>
-          <button className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
-            Связаться с нами
-          </button>
-        </div>
-      </div>
-
-      {/* Модальное окно оплаты */}
-      {showPaymentForm && selectedPlan && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
-            <PaymentForm
-              plan={selectedPlan}
-              period={period}
-              onSuccess={handlePaymentSuccess}
-              onCancel={handlePaymentCancel}
-            />
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-gray-200">
+                  <th className="text-left py-4 px-4 font-light text-gray-900">Функция</th>
+                  <th className="text-center py-4 px-4 font-light text-gray-900">Базовый</th>
+                  <th className="text-center py-4 px-4 font-light text-gray-900">Профессиональный</th>
+                  <th className="text-center py-4 px-4 font-light text-gray-900">Корпоративный</th>
+                </tr>
+              </thead>
+              <tbody>
+                {features.map((feature, index) => (
+                  <tr key={index} className="border-b border-gray-100">
+                    <td className="py-4 px-4 font-light text-gray-900">{feature.title}</td>
+                    <td className="py-4 px-4 text-center font-light text-gray-600">{feature.basic}</td>
+                    <td className="py-4 px-4 text-center font-light text-gray-600">{feature.professional}</td>
+                    <td className="py-4 px-4 text-center font-light text-gray-600">{feature.enterprise}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
-      )}
+        
+        {/* FAQ */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 mb-12">
+          <h2 className="text-xl font-light text-gray-900 mb-8">Часто задаваемые вопросы</h2>
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-light text-gray-900 mb-2">
+                Можно ли изменить план в любое время?
+              </h3>
+              <p className="text-gray-600 text-sm font-light leading-tight">
+                Да, вы можете изменить план в любое время. При переходе на более дорогой план 
+                оплата будет пропорционально распределена, при переходе на более дешевый - 
+                остаток средств будет зачислен на следующий период.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-lg font-light text-gray-900 mb-2">
+                Есть ли пробный период?
+              </h3>
+              <p className="text-gray-600 text-sm font-light leading-tight">
+                Да, мы предоставляем 14-дневный пробный период для всех платных планов. 
+                Вы можете протестировать все функции без обязательств.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-lg font-light text-gray-900 mb-2">
+                Какие способы оплаты принимаются?
+              </h3>
+              <p className="text-gray-600 text-sm font-light leading-tight">
+                Мы принимаем все основные кредитные карты, банковские переводы и электронные платежи. 
+                Для корпоративных клиентов доступны специальные условия оплаты.
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        {/* Демо-информация */}
+        <div className="mt-12 p-6 bg-card border border-border rounded-lg">
+          <h3 className="text-lg font-light text-white mb-4">Демо-версия</h3>
+          <p className="text-muted text-sm font-light leading-tight">
+            Это демо-страница тарифов. В полной версии здесь будет система оплаты, 
+            управление подписками и интеграция с платежными системами.
+          </p>
+        </div>
+      </div>
     </div>
   );
-};
-
-export default PricingNew; 
+} 

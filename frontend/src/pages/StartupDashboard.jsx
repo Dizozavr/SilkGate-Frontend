@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useToast } from '../components/Shared/ToastProvider';
+import Icon from '../components/Shared/Icon';
 
 function getStartupProfileProgress(s) {
   let total = 8, filled = 0;
@@ -160,81 +161,99 @@ export default function StartupDashboard() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-[#10182A] px-2 sm:px-0">
-      <div className="w-full max-w-xs sm:max-w-2xl p-4 sm:p-8 bg-[#F5F6FA] rounded-lg shadow mb-6 sm:mb-8">
-        <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-center text-[#10182A]">
+    <div className="min-h-screen bg-[#10182A] p-8">
+      <div className="flex justify-between items-center mb-8">
+        <h2 className="text-3xl font-light text-center text-white">
           Дашборд стартапера
         </h2>
-        {/* Прогресс-бар и подсказки — как раньше */}
+      </div>
+      <div className="max-w-7xl mx-auto mb-6 sm:mb-8 p-4 sm:p-6 bg-white rounded-lg shadow-lg">
+        {/* Прогресс-бар и подсказки */}
         {projects.length > 0 && (
-          <div className="mb-4 sm:mb-6">
-            <div className="mb-1 text-xs sm:text-sm font-semibold">Заполненность профиля: {getStartupProfileProgress(projects[0])}%</div>
-            <div className="w-full h-3 bg-gray-200 rounded">
-              <div style={{width: getStartupProfileProgress(projects[0]) + '%'}} className="h-3 bg-blue-500 rounded transition-all"></div>
+          <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+            <div className="mb-2 text-sm font-light text-gray-900">Заполненность профиля: {getStartupProfileProgress(projects[0])}%</div>
+            <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+              <div style={{width: getStartupProfileProgress(projects[0]) + '%'}} className="h-2 bg-[#3B82F6] rounded-full transition-all"></div>
             </div>
             {getStartupProfileProgress(projects[0]) < 100 && (
-              <ul className="mt-2 text-xs text-gray-600 list-disc list-inside">
+              <ul className="mt-3 text-xs text-gray-700 list-disc list-inside font-light">
                 {getStartupProfileHints(projects[0]).map(hint => <li key={hint}>{hint}</li>)}
               </ul>
             )}
           </div>
         )}
         {/* Вкладки */}
-        <div className="flex flex-col sm:flex-row mb-3 sm:mb-4 gap-1 sm:gap-2">
-          <button type="button" className={`px-3 sm:px-4 py-2 rounded-t ${activeTab==='main' ? 'bg-white border-b-2 border-blue-500 font-bold' : 'bg-gray-200'}`} onClick={()=>setActiveTab('main')}>Основное</button>
-          <button type="button" className={`px-3 sm:px-4 py-2 rounded-t ${activeTab==='team' ? 'bg-white border-b-2 border-blue-500 font-bold' : 'bg-gray-200'}`} onClick={()=>setActiveTab('team')}>Команда</button>
-          <button type="button" className={`px-3 sm:px-4 py-2 rounded-t ${activeTab==='docs' ? 'bg-white border-b-2 border-blue-500 font-bold' : 'bg-gray-200'}`} onClick={()=>setActiveTab('docs')}>Документы/Ссылки</button>
+        <div className="flex flex-col sm:flex-row mb-6 gap-2">
+          <button type="button" className={`px-4 py-3 rounded-lg font-light text-sm transition-all duration-200 ${activeTab==='main' ? 'bg-[#3B82F6] text-white shadow-lg' : 'bg-white text-black border border-gray-200 hover:bg-gray-50'}`} onClick={()=>setActiveTab('main')}>
+            <div className="flex items-center space-x-2">
+              <Icon name="database" size={16} color={activeTab==='main' ? 'white' : 'black'} />
+              <span>Основное</span>
+            </div>
+          </button>
+          <button type="button" className={`px-4 py-3 rounded-lg font-light text-sm transition-all duration-200 ${activeTab==='team' ? 'bg-[#3B82F6] text-white shadow-lg' : 'bg-white text-black border border-gray-200 hover:bg-gray-50'}`} onClick={()=>setActiveTab('team')}>
+            <div className="flex items-center space-x-2">
+              <Icon name="user" size={16} color={activeTab==='team' ? 'white' : 'black'} />
+              <span>Команда</span>
+            </div>
+          </button>
+          <button type="button" className={`px-4 py-3 rounded-lg font-light text-sm transition-all duration-200 ${activeTab==='docs' ? 'bg-[#3B82F6] text-white shadow-lg' : 'bg-white text-black border border-gray-200 hover:bg-gray-50'}`} onClick={()=>setActiveTab('docs')}>
+            <div className="flex items-center space-x-2">
+              <Icon name="file" size={16} color={activeTab==='docs' ? 'white' : 'black'} />
+              <span>Документы/Ссылки</span>
+            </div>
+          </button>
         </div>
         <form onSubmit={handleSubmit} className="mb-4 sm:mb-6">
           {activeTab === 'main' && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 mb-3 sm:mb-4">
-              <input className="px-3 sm:px-4 py-2 border rounded flex-1 min-w-0 text-sm sm:text-base" name="name" value={form.name} onChange={handleChange} type="text" placeholder="Название*" />
-              <input className="px-3 sm:px-4 py-2 border rounded flex-1 min-w-0 text-sm sm:text-base" name="industry" value={form.industry} onChange={handleChange} type="text" placeholder="Индустрия" />
-              <input className="px-3 sm:px-4 py-2 border rounded flex-1 min-w-0 text-sm sm:text-base" name="location" value={form.location} onChange={handleChange} type="text" placeholder="Локация" />
-              <input className="px-3 sm:px-4 py-2 border rounded flex-1 min-w-0 text-sm sm:text-base" name="fundingAmount" value={form.fundingAmount} onChange={handleChange} type="number" placeholder="Запрашиваемая сумма" />
-              <input className="px-3 sm:px-4 py-2 border rounded flex-1 min-w-0 text-sm sm:text-base" name="stage" value={form.stage} onChange={handleChange} type="text" placeholder="Стадия (идея, MVP, ... )" />
-              <input className="px-3 sm:px-4 py-2 border rounded flex-1 min-w-0 text-sm sm:text-base" name="equityOffered" value={form.equityOffered} onChange={handleChange} type="number" placeholder="Доля, %" />
-              <textarea className="w-full mb-3 sm:mb-4 px-3 sm:px-4 py-2 border rounded md:col-span-2 text-sm sm:text-base" name="description" value={form.description} onChange={handleChange} placeholder="Описание проекта" rows={4} />
+              <input className="px-3 sm:px-4 py-2 border rounded flex-1 min-w-0 text-sm sm:text-base text-gray-900 placeholder-gray-500" name="name" value={form.name} onChange={handleChange} type="text" placeholder="Название*" />
+              <input className="px-3 sm:px-4 py-2 border rounded flex-1 min-w-0 text-sm sm:text-base text-gray-900 placeholder-gray-500" name="industry" value={form.industry} onChange={handleChange} type="text" placeholder="Индустрия" />
+              <input className="px-3 sm:px-4 py-2 border rounded flex-1 min-w-0 text-sm sm:text-base text-gray-900 placeholder-gray-500" name="location" value={form.location} onChange={handleChange} type="text" placeholder="Локация" />
+              <input className="px-3 sm:px-4 py-2 border rounded flex-1 min-w-0 text-sm sm:text-base text-gray-900 placeholder-gray-500" name="fundingAmount" value={form.fundingAmount} onChange={handleChange} type="number" placeholder="Запрашиваемая сумма" />
+              <input className="px-3 sm:px-4 py-2 border rounded flex-1 min-w-0 text-sm sm:text-base text-gray-900 placeholder-gray-500" name="stage" value={form.stage} onChange={handleChange} type="text" placeholder="Стадия (идея, MVP, ... )" />
+              <input className="px-3 sm:px-4 py-2 border rounded flex-1 min-w-0 text-sm sm:text-base text-gray-900 placeholder-gray-500" name="equityOffered" value={form.equityOffered} onChange={handleChange} type="number" placeholder="Доля, %" />
+              <textarea className="w-full mb-3 sm:mb-4 px-3 sm:px-4 py-2 border rounded md:col-span-2 text-sm sm:text-base text-gray-900 placeholder-gray-500" name="description" value={form.description} onChange={handleChange} placeholder="Описание проекта" rows={4} />
               <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 mb-2 md:col-span-2">
-                <label className="text-xs sm:text-base"><input type="checkbox" name="hasRevenue" checked={form.hasRevenue} onChange={e => setForm(f => ({...f, hasRevenue: e.target.checked}))} /> Есть выручка</label>
-                <label className="text-xs sm:text-base"><input type="checkbox" name="hasMVP" checked={form.hasMVP} onChange={e => setForm(f => ({...f, hasMVP: e.target.checked}))} /> Есть MVP</label>
-                <label className="text-xs sm:text-base"><input type="checkbox" name="hasLegalEntity" checked={form.hasLegalEntity} onChange={e => setForm(f => ({...f, hasLegalEntity: e.target.checked}))} /> Юр. лицо</label>
+                <label className="text-xs sm:text-base text-gray-900"><input type="checkbox" name="hasRevenue" checked={form.hasRevenue} onChange={e => setForm(f => ({...f, hasRevenue: e.target.checked}))} /> Есть выручка</label>
+                <label className="text-xs sm:text-base text-gray-900"><input type="checkbox" name="hasMVP" checked={form.hasMVP} onChange={e => setForm(f => ({...f, hasMVP: e.target.checked}))} /> Есть MVP</label>
+                <label className="text-xs sm:text-base text-gray-900"><input type="checkbox" name="hasLegalEntity" checked={form.hasLegalEntity} onChange={e => setForm(f => ({...f, hasLegalEntity: e.target.checked}))} /> Юр. лицо</label>
               </div>
             </div>
           )}
           {activeTab === 'team' && (
             <div className="flex flex-col gap-2 mb-2 mt-4">
-              <div className="font-semibold mb-1 text-sm sm:text-base">Команда:</div>
+              <div className="font-semibold mb-1 text-sm sm:text-base text-gray-900">Команда:</div>
               {form.team.map((m, i) => (
                 <div key={i} className="flex flex-col sm:flex-row items-center gap-2 w-full">
-                  <input className="px-2 py-1 border rounded flex-1 min-w-0 text-sm sm:text-base" value={m.name} onChange={e => setForm(f => {const t=[...f.team];t[i].name=e.target.value;return {...f, team:t};})} placeholder="Имя" />
-                  <input className="px-2 py-1 border rounded flex-1 min-w-0 text-sm sm:text-base" value={m.role} onChange={e => setForm(f => {const t=[...f.team];t[i].role=e.target.value;return {...f, team:t};})} placeholder="Роль" />
-                  <input className="px-2 py-1 border rounded flex-1 min-w-0 text-sm sm:text-base" value={m.linkedin} onChange={e => setForm(f => {const t=[...f.team];t[i].linkedin=e.target.value;return {...f, team:t};})} placeholder="LinkedIn" />
+                  <input className="px-2 py-1 border rounded flex-1 min-w-0 text-sm sm:text-base text-gray-900 placeholder-gray-500" value={m.name} onChange={e => setForm(f => {const t=[...f.team];t[i].name=e.target.value;return {...f, team:t};})} placeholder="Имя" />
+                  <input className="px-2 py-1 border rounded flex-1 min-w-0 text-sm sm:text-base text-gray-900 placeholder-gray-500" value={m.role} onChange={e => setForm(f => {const t=[...f.team];t[i].role=e.target.value;return {...f, team:t};})} placeholder="Роль" />
+                  <input className="px-2 py-1 border rounded flex-1 min-w-0 text-sm sm:text-base text-gray-900 placeholder-gray-500" value={m.linkedin} onChange={e => setForm(f => {const t=[...f.team];t[i].linkedin=e.target.value;return {...f, team:t};})} placeholder="LinkedIn" />
                   <button type="button" className="text-xs text-red-600 px-2 py-1 border border-red-200 rounded hover:bg-red-50 ml-0 sm:ml-1" style={{height:32}} onClick={() => setForm(f => ({...f, team: f.team.filter((_,j)=>j!==i)}))}>✕</button>
                 </div>
               ))}
-              <button type="button" className="text-xs text-blue-700 mt-2 self-start" onClick={() => setForm(f => ({...f, team: [...f.team, {name:'',role:'',linkedin:''}]}))}>Добавить участника</button>
+              <button type="button" className="text-xs text-[#3B82F6] mt-2 self-start" onClick={() => setForm(f => ({...f, team: [...f.team, {name:'',role:'',linkedin:''}]}))}>Добавить участника</button>
             </div>
           )}
           {activeTab === 'docs' && (
             <div className="flex flex-col gap-2 mb-2 mt-4">
-              <div className="font-semibold mb-1 text-sm sm:text-base">Ссылки:</div>
-              <input className="px-3 sm:px-4 py-2 border rounded text-sm sm:text-base" name="website" value={form.links?.website||''} onChange={e => setForm(f => ({...f, links: {...f.links, website: e.target.value}}))} type="text" placeholder="Сайт" />
-              <input className="px-3 sm:px-4 py-2 border rounded text-sm sm:text-base" name="pitchDeck" value={form.links?.pitchDeck||''} onChange={e => setForm(f => ({...f, links: {...f.links, pitchDeck: e.target.value}}))} type="text" placeholder="Pitch Deck" />
-              <input className="px-3 sm:px-4 py-2 border rounded text-sm sm:text-base" name="prototype" value={form.links?.prototype||''} onChange={e => setForm(f => ({...f, links: {...f.links, prototype: e.target.value}}))} type="text" placeholder="Прототип (ссылка)" />
+              <div className="font-semibold mb-1 text-sm sm:text-base text-gray-900">Ссылки:</div>
+              <input className="px-3 sm:px-4 py-2 border rounded text-sm sm:text-base text-gray-900 placeholder-gray-500" name="website" value={form.links?.website||''} onChange={e => setForm(f => ({...f, links: {...f.links, website: e.target.value}}))} type="text" placeholder="Сайт" />
+              <input className="px-3 sm:px-4 py-2 border rounded text-sm sm:text-base text-gray-900 placeholder-gray-500" name="pitchDeck" value={form.links?.pitchDeck||''} onChange={e => setForm(f => ({...f, links: {...f.links, pitchDeck: e.target.value}}))} type="text" placeholder="Pitch Deck" />
+              <input className="px-3 sm:px-4 py-2 border rounded text-sm sm:text-base text-gray-900 placeholder-gray-500" name="prototype" value={form.links?.prototype||''} onChange={e => setForm(f => ({...f, links: {...f.links, prototype: e.target.value}}))} type="text" placeholder="Прототип (ссылка)" />
             </div>
           )}
           {/* {error && <div className="mb-2 text-red-600 text-center">{error}</div>} */}
           {/* {success && <div className="mb-2 text-green-600 text-center">{success}</div>} */}
-          <button className="w-full py-2 bg-[#FFD700] text-[#10182A] rounded font-semibold hover:bg-yellow-400 transition text-sm sm:text-base" type="submit" disabled={loading}>
-            {loading ? 'Создание...' : 'Создать стартап'}
+          <button className="w-full py-3 bg-[#3B82F6] text-white rounded-lg font-light hover:bg-blue-700 transition-colors text-sm flex items-center justify-center space-x-2" type="submit" disabled={loading}>
+            <Icon name="add" size={16} color="white" />
+            <span>{loading ? 'Создание...' : 'Создать стартап'}</span>
           </button>
         </form>
-        <h3 className="text-base sm:text-lg font-semibold mb-2">Мои стартапы</h3>
+        <h3 className="text-base sm:text-lg font-semibold mb-2 text-gray-900">Мои стартапы</h3>
         {fetching ? (
-          <div className="text-gray-400 text-center">Загрузка...</div>
+          <div className="text-gray-700 text-center">Загрузка...</div>
         ) : projects.length === 0 ? (
-          <div className="text-gray-400 text-center">У вас пока нет проектов.</div>
+          <div className="text-gray-700 text-center">У вас пока нет проектов.</div>
         ) : (
           <ul className="divide-y">
             {projects.map(s => (
@@ -249,40 +268,40 @@ export default function StartupDashboard() {
                     <form onSubmit={handleEditSubmit} className="mb-2">
                       {editActiveTab === 'main' && (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                          <input className="px-4 py-2 border rounded flex-1 min-w-[220px]" name="name" value={editForm.name} onChange={handleEditChange} type="text" placeholder="Название*" />
-                          <input className="px-4 py-2 border rounded flex-1 min-w-[220px]" name="industry" value={editForm.industry} onChange={handleEditChange} type="text" placeholder="Индустрия" />
-                          <input className="px-4 py-2 border rounded flex-1 min-w-[220px]" name="location" value={editForm.location} onChange={handleEditChange} type="text" placeholder="Локация" />
-                          <input className="px-4 py-2 border rounded flex-1 min-w-[220px]" name="fundingAmount" value={editForm.fundingAmount} onChange={handleEditChange} type="number" placeholder="Сумма" />
-                          <input className="px-4 py-2 border rounded flex-1 min-w-[220px]" name="stage" value={editForm.stage} onChange={handleEditChange} type="text" placeholder="Стадия (идея, MVP, ... )" />
-                          <input className="px-4 py-2 border rounded flex-1 min-w-[220px]" name="equityOffered" value={editForm.equityOffered} onChange={handleEditChange} type="number" placeholder="Доля, %" />
-                          <textarea className="w-full mb-4 px-4 py-2 border rounded md:col-span-2" name="description" value={editForm.description} onChange={handleEditChange} placeholder="Описание проекта" rows={4} />
+                          <input className="px-4 py-2 border rounded flex-1 min-w-[220px] text-gray-900 placeholder-gray-500" name="name" value={editForm.name} onChange={handleEditChange} type="text" placeholder="Название*" />
+                          <input className="px-4 py-2 border rounded flex-1 min-w-[220px] text-gray-900 placeholder-gray-500" name="industry" value={editForm.industry} onChange={handleEditChange} type="text" placeholder="Индустрия" />
+                          <input className="px-4 py-2 border rounded flex-1 min-w-[220px] text-gray-900 placeholder-gray-500" name="location" value={editForm.location} onChange={handleEditChange} type="text" placeholder="Локация" />
+                          <input className="px-4 py-2 border rounded flex-1 min-w-[220px] text-gray-900 placeholder-gray-500" name="fundingAmount" value={editForm.fundingAmount} onChange={handleEditChange} type="number" placeholder="Сумма" />
+                          <input className="px-4 py-2 border rounded flex-1 min-w-[220px] text-gray-900 placeholder-gray-500" name="stage" value={editForm.stage} onChange={handleEditChange} type="text" placeholder="Стадия (идея, MVP, ... )" />
+                          <input className="px-4 py-2 border rounded flex-1 min-w-[220px] text-gray-900 placeholder-gray-500" name="equityOffered" value={editForm.equityOffered} onChange={handleEditChange} type="number" placeholder="Доля, %" />
+                          <textarea className="w-full mb-4 px-4 py-2 border rounded md:col-span-2 text-gray-900 placeholder-gray-500" name="description" value={editForm.description} onChange={handleEditChange} placeholder="Описание проекта" rows={4} />
                           <div className="flex flex-row gap-4 mb-2 md:col-span-2">
-                            <label><input type="checkbox" name="hasRevenue" checked={editForm.hasRevenue} onChange={e => setEditForm(f => ({...f, hasRevenue: e.target.checked}))} /> Есть выручка</label>
-                            <label><input type="checkbox" name="hasMVP" checked={editForm.hasMVP} onChange={e => setEditForm(f => ({...f, hasMVP: e.target.checked}))} /> Есть MVP</label>
-                            <label><input type="checkbox" name="hasLegalEntity" checked={editForm.hasLegalEntity} onChange={e => setEditForm(f => ({...f, hasLegalEntity: e.target.checked}))} /> Юр. лицо</label>
+                            <label className="text-gray-900"><input type="checkbox" name="hasRevenue" checked={editForm.hasRevenue} onChange={e => setEditForm(f => ({...f, hasRevenue: e.target.checked}))} /> Есть выручка</label>
+                            <label className="text-gray-900"><input type="checkbox" name="hasMVP" checked={editForm.hasMVP} onChange={e => setEditForm(f => ({...f, hasMVP: e.target.checked}))} /> Есть MVP</label>
+                            <label className="text-gray-900"><input type="checkbox" name="hasLegalEntity" checked={editForm.hasLegalEntity} onChange={e => setEditForm(f => ({...f, hasLegalEntity: e.target.checked}))} /> Юр. лицо</label>
                           </div>
                         </div>
                       )}
                       {editActiveTab === 'team' && (
                         <div className="flex flex-col gap-2 mb-2 mt-4">
-                          <div className="font-semibold mb-1">Команда:</div>
+                          <div className="font-semibold mb-1 text-gray-900">Команда:</div>
                           {(editForm.team||[]).map((m,i)=>(
                             <div key={i} className="flex flex-row items-center gap-2 w-full">
-                              <input className="px-2 py-1 border rounded flex-1 min-w-0" value={m.name} onChange={e => setEditForm(f => {const t=[...f.team];t[i].name=e.target.value;return {...f, team:t};})} placeholder="Имя" />
-                              <input className="px-2 py-1 border rounded flex-1 min-w-0" value={m.role} onChange={e => setEditForm(f => {const t=[...f.team];t[i].role=e.target.value;return {...f, team:t};})} placeholder="Роль" />
-                              <input className="px-2 py-1 border rounded flex-1 min-w-0" value={m.linkedin} onChange={e => setEditForm(f => {const t=[...f.team];t[i].linkedin=e.target.value;return {...f, team:t};})} placeholder="LinkedIn" />
+                              <input className="px-2 py-1 border rounded flex-1 min-w-0 text-gray-900 placeholder-gray-500" value={m.name} onChange={e => setEditForm(f => {const t=[...f.team];t[i].name=e.target.value;return {...f, team:t};})} placeholder="Имя" />
+                              <input className="px-2 py-1 border rounded flex-1 min-w-0 text-gray-900 placeholder-gray-500" value={m.role} onChange={e => setEditForm(f => {const t=[...f.team];t[i].role=e.target.value;return {...f, team:t};})} placeholder="Роль" />
+                              <input className="px-2 py-1 border rounded flex-1 min-w-0 text-gray-900 placeholder-gray-500" value={m.linkedin} onChange={e => setEditForm(f => {const t=[...f.team];t[i].linkedin=e.target.value;return {...f, team:t};})} placeholder="LinkedIn" />
                               <button type="button" className="text-xs text-red-600 px-2 py-1 border border-red-200 rounded hover:bg-red-50 ml-1" style={{height:32}} onClick={() => setEditForm(f => ({...f, team: f.team.filter((_,j)=>j!==i)}))}>Удалить</button>
                             </div>
                           ))}
-                          <button type="button" className="text-xs text-blue-700 mt-2 self-start" onClick={() => setEditForm(f => ({...f, team: [...f.team, {name:'',role:'',linkedin:''}]}))}>Добавить участника</button>
+                          <button type="button" className="text-xs text-[#3B82F6] mt-2 self-start" onClick={() => setEditForm(f => ({...f, team: [...f.team, {name:'',role:'',linkedin:''}]}))}>Добавить участника</button>
                         </div>
                       )}
                       {editActiveTab === 'docs' && (
                         <div className="flex flex-col gap-2 mb-2 mt-4">
-                          <div className="font-semibold mb-1">Ссылки:</div>
-                          <input className="px-4 py-2 border rounded" name="website" value={editForm.links?.website||''} onChange={e => setEditForm(f => ({...f, links: {...f.links, website: e.target.value}}))} type="text" placeholder="Сайт" />
-                          <input className="px-4 py-2 border rounded" name="pitchDeck" value={editForm.links?.pitchDeck||''} onChange={e => setEditForm(f => ({...f, links: {...f.links, pitchDeck: e.target.value}}))} type="text" placeholder="Pitch Deck" />
-                          <input className="px-4 py-2 border rounded" name="prototype" value={editForm.links?.prototype||''} onChange={e => setEditForm(f => ({...f, links: {...f.links, prototype: e.target.value}}))} type="text" placeholder="Прототип (ссылка)" />
+                          <div className="font-semibold mb-1 text-gray-900">Ссылки:</div>
+                          <input className="px-4 py-2 border rounded text-gray-900 placeholder-gray-500" name="website" value={editForm.links?.website||''} onChange={e => setEditForm(f => ({...f, links: {...f.links, website: e.target.value}}))} type="text" placeholder="Сайт" />
+                          <input className="px-4 py-2 border rounded text-gray-900 placeholder-gray-500" name="pitchDeck" value={editForm.links?.pitchDeck||''} onChange={e => setEditForm(f => ({...f, links: {...f.links, pitchDeck: e.target.value}}))} type="text" placeholder="Pitch Deck" />
+                          <input className="px-4 py-2 border rounded text-gray-900 placeholder-gray-500" name="prototype" value={editForm.links?.prototype||''} onChange={e => setEditForm(f => ({...f, links: {...f.links, prototype: e.target.value}}))} type="text" placeholder="Прототип (ссылка)" />
                         </div>
                       )}
                       <div className="flex gap-2">
@@ -293,9 +312,9 @@ export default function StartupDashboard() {
                   </>
                 ) : (
                   <>
-                    <div className="font-bold">{s.name}</div>
-                    <div className="text-gray-600 text-sm mb-1">{s.description}</div>
-                    <div className="text-xs text-gray-400 mb-1">Статус: {s.status}</div>
+                    <div className="font-bold text-gray-900">{s.name}</div>
+                    <div className="text-gray-700 text-sm mb-1">{s.description}</div>
+                    <div className="text-xs text-gray-600 mb-1">Статус: {s.status}</div>
                     {(!s.pitchDeckUrl || s.pitchDeckUrl === '') && s.status !== 'archived' && (
                       <>
                         <div className="text-xs text-yellow-700 bg-yellow-100 border-l-4 border-yellow-400 p-2 mb-1 font-semibold flex items-center gap-2">
@@ -307,14 +326,14 @@ export default function StartupDashboard() {
                         </div>
                       </>
                     )}
-                    <div><b>Стадия:</b> {s.stage}</div>
-                    <div><b>Доля:</b> {s.equityOffered}%</div>
-                    <div><b>Описание:</b> {s.description}</div>
-                    <div><b>Юр. лицо:</b> {s.hasLegalEntity ? 'Да' : 'Нет'}</div>
-                    <div><b>Есть выручка:</b> {s.hasRevenue ? 'Да' : 'Нет'}</div>
-                    <div><b>Есть MVP:</b> {s.hasMVP ? 'Да' : 'Нет'}</div>
-                    <div><b>Ссылки:</b> {s.links?.website && <a href={s.links.website} target="_blank" rel="noopener noreferrer">{s.links.website.replace(/^https?:\/\//, '')}</a>} {s.links?.pitchDeck && <a href={s.links.pitchDeck} target="_blank" rel="noopener noreferrer">{s.links.pitchDeck.replace(/^https?:\/\//, '')}</a>} {s.links?.prototype && <a href={s.links.prototype} target="_blank" rel="noopener noreferrer">{s.links.prototype.replace(/^https?:\/\//, '')}</a>}</div>
-                    <div><b>Команда:</b> <ul>{(s.team||[]).map((m,i)=>(<li key={i}>{m.name} — {m.role} {m.linkedin && <a href={m.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>}</li>))}</ul></div>
+                    <div className="text-gray-900"><b>Стадия:</b> {s.stage}</div>
+                    <div className="text-gray-900"><b>Доля:</b> {s.equityOffered}%</div>
+                    <div className="text-gray-900"><b>Описание:</b> {s.description}</div>
+                    <div className="text-gray-900"><b>Юр. лицо:</b> {s.hasLegalEntity ? 'Да' : 'Нет'}</div>
+                    <div className="text-gray-900"><b>Есть выручка:</b> {s.hasRevenue ? 'Да' : 'Нет'}</div>
+                    <div className="text-gray-900"><b>Есть MVP:</b> {s.hasMVP ? 'Да' : 'Нет'}</div>
+                    <div className="text-gray-900"><b>Ссылки:</b> {s.links?.website && <a href={s.links.website} target="_blank" rel="noopener noreferrer" className="text-[#3B82F6] hover:underline">{s.links.website.replace(/^https?:\/\//, '')}</a>} {s.links?.pitchDeck && <a href={s.links.pitchDeck} target="_blank" rel="noopener noreferrer" className="text-[#3B82F6] hover:underline">{s.links.pitchDeck.replace(/^https?:\/\//, '')}</a>} {s.links?.prototype && <a href={s.links.prototype} target="_blank" rel="noopener noreferrer" className="text-[#3B82F6] hover:underline">{s.links.prototype.replace(/^https?:\/\//, '')}</a>}</div>
+                    <div className="text-gray-900"><b>Команда:</b> <ul>{(s.team||[]).map((m,i)=>(<li key={i}>{m.name} — {m.role} {m.linkedin && <a href={m.linkedin} target="_blank" rel="noopener noreferrer" className="text-[#3B82F6] hover:underline">LinkedIn</a>}</li>))}</ul></div>
                     <button className="px-3 py-1 bg-[#FFD700] text-[#10182A] rounded text-xs font-semibold hover:bg-yellow-400 transition" onClick={() => handleEdit(s)}>
                       Редактировать
                     </button>

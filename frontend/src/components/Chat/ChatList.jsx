@@ -1,167 +1,119 @@
-import React, { useState, useEffect } from 'react';
-import { jwtDecode } from 'jwt-decode';
+import React, { useState } from 'react';
 
-const ChatList = ({ onSelectConversation, selectedConversationId }) => {
-  const [conversations, setConversations] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [currentUser, setCurrentUser] = useState(null);
+const ChatList = ({ onSelectChat, onNewChat }) => {
+  const [selectedChatId, setSelectedChatId] = useState(null);
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      try {
-        const decoded = jwtDecode(token);
-        setCurrentUser(decoded);
-      } catch (error) {
-        console.error('Error decoding token:', error);
-      }
+  // Демо-данные чатов
+  const chats = [
+    {
+      id: 1,
+      name: 'Мастер',
+      lastMessage: 'Привет! Это демо-режим чата...',
+      timestamp: '15:45',
+      unread: 0,
+      avatar: 'М',
+      isDemo: true,
+      participants: ['current-user', 'master'],
+      maxParticipants: 3
+    },
+    {
+      id: 2,
+      name: 'Анна Петрова',
+      lastMessage: 'Здравствуйте! Готова помочь с юридическими вопросами',
+      timestamp: '14:30',
+      unread: 2,
+      avatar: 'АП',
+      isDemo: false,
+      participants: ['current-user', 'anna-petrov'],
+      maxParticipants: 3
+    },
+    {
+      id: 3,
+      name: 'Михаил Сидоров',
+      lastMessage: 'Отличная идея! Давайте обсудим детали',
+      timestamp: '12:15',
+      unread: 0,
+      avatar: 'МС',
+      isDemo: false,
+      participants: ['current-user', 'mikhail-sid'],
+      maxParticipants: 3
     }
-    fetchConversations();
-  }, []);
+  ];
 
-  const fetchConversations = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('/api/chat/conversations', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setConversations(data);
-      } else {
-        setError('Ошибка при загрузке диалогов');
-      }
-    } catch (error) {
-      console.error('Error fetching conversations:', error);
-      setError('Ошибка при загрузке диалогов');
-    } finally {
-      setLoading(false);
-    }
+  const handleChatSelect = (chat) => {
+    setSelectedChatId(chat.id);
+    onSelectChat(chat);
   };
 
-  const formatTime = (timestamp) => {
-    if (!timestamp) return '';
-    
-    const date = new Date(timestamp);
-    const now = new Date();
-    const diffInHours = (now - date) / (1000 * 60 * 60);
 
-    if (diffInHours < 24) {
-      return date.toLocaleTimeString('ru-RU', { 
-        hour: '2-digit', 
-        minute: '2-digit' 
-      });
-    } else if (diffInHours < 48) {
-      return 'Вчера';
-    } else {
-      return date.toLocaleDateString('ru-RU', { 
-        day: '2-digit', 
-        month: '2-digit' 
-      });
-    }
-  };
-
-  const truncateText = (text, maxLength = 50) => {
-    if (!text) return '';
-    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
-  };
-
-  const isInvestorOrAdmin = currentUser && (currentUser.role === 'investor' || currentUser.role === 'admin');
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="text-center text-red-500 p-4">
-        {error}
-      </div>
-    );
-  }
-
-  if (conversations.length === 0) {
-    return (
-      <div className="text-center text-gray-500 p-4">
-        {isInvestorOrAdmin ? (
-          <>
-            <p>У вас пока нет диалогов</p>
-            <p className="text-sm mt-2">Начните общение со стартапами</p>
-          </>
-        ) : (
-          <>
-            <p>У вас пока нет сообщений</p>
-            <p className="text-sm mt-2">Инвесторы могут написать вам первыми</p>
-          </>
-        )}
-      </div>
-    );
-  }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-      <div className="p-4 border-b border-gray-200">
-        <h3 className="text-lg font-semibold text-gray-900">
-          {isInvestorOrAdmin ? 'Диалоги со стартапами' : 'Сообщения от инвесторов'}
-        </h3>
+    <div className="flex flex-col h-full bg-white border-r border-gray-200">
+      {/* Заголовок */}
+      <div className="p-4 border-b border-gray-200 bg-gray-50">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-light text-gray-900">Чаты</h2>
+          <button
+            onClick={() => onNewChat()}
+            className="p-2 text-[#3B82F6] hover:bg-blue-50 rounded-lg transition-colors"
+            title="Новый чат"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+          </button>
+        </div>
       </div>
-      
-      <div className="divide-y divide-gray-200">
-        {conversations.map((conversation) => (
+
+      {/* Список чатов */}
+      <div className="flex-1 overflow-y-auto">
+        {chats.map((chat) => (
           <div
-            key={conversation._id}
-            onClick={() => onSelectConversation(conversation)}
-            className={`p-4 cursor-pointer hover:bg-gray-50 transition-colors ${
-              selectedConversationId === conversation._id ? 'bg-blue-50 border-r-2 border-blue-500' : ''
+            key={chat.id}
+            onClick={() => handleChatSelect(chat)}
+            className={`p-4 border-b border-gray-100 cursor-pointer transition-colors hover:bg-gray-50 ${
+              selectedChatId === chat.id ? 'bg-blue-50 border-l-4 border-l-[#3B82F6]' : ''
             }`}
           >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3 flex-1 min-w-0">
-                <div className="flex-shrink-0">
-                  <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
-                    <span className="text-white font-semibold text-sm">
-                      {conversation.other_participant?.username?.charAt(0).toUpperCase() || 'U'}
-                    </span>
-                  </div>
+            <div className="flex items-center space-x-3">
+              {/* Аватар */}
+              <div className="relative">
+                <div className="w-12 h-12 bg-[#3B82F6] rounded-full flex items-center justify-center">
+                  <span className="text-white font-light text-sm">{chat.avatar}</span>
                 </div>
-                
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between">
-                    <h4 className="text-sm font-medium text-gray-900 truncate">
-                      {conversation.other_participant?.username || 'Неизвестный пользователь'}
-                    </h4>
-                    <div className="flex items-center space-x-2">
-                      {conversation.unread_count > 0 && (
-                        <span className="bg-red-500 text-white text-xs rounded-full px-2 py-1 min-w-[20px] text-center">
-                          {conversation.unread_count}
-                        </span>
-                      )}
-                      <span className="text-xs text-gray-500">
-                        {formatTime(conversation.last_message?.timestamp)}
-                      </span>
-                    </div>
+                {chat.isDemo && (
+                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-yellow-400 rounded-full flex items-center justify-center">
+                    <span className="text-white text-xs">Д</span>
                   </div>
-                  
-                  <p className="text-sm text-gray-600 truncate mt-1">
-                    {conversation.last_message?.content ? 
-                      truncateText(conversation.last_message.content) : 
-                      'Нет сообщений'
-                    }
-                  </p>
+                )}
+              </div>
+
+              {/* Информация о чате */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-light text-gray-900 truncate">{chat.name}</h3>
+                  <span className="text-xs text-gray-500">{chat.timestamp}</span>
+                </div>
+                <p className="text-sm text-gray-600 truncate mt-1">{chat.lastMessage}</p>
+                <div className="flex items-center justify-between mt-1">
+                  <span className="text-xs text-gray-400">
+                    {chat.participants.length}/{chat.maxParticipants} участников
+                  </span>
+                  {chat.unread > 0 && (
+                    <span className="bg-[#3B82F6] text-white text-xs rounded-full px-2 py-1 min-w-[20px] text-center">
+                      {chat.unread}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
           </div>
         ))}
       </div>
+
+
+
+
     </div>
   );
 };

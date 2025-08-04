@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useToast } from '../components/Shared/ToastProvider';
+
+import Icon from '../components/Shared/Icon';
+import Modal from '../components/Shared/Modal';
+import WhatsAppChat from '../components/Chat/WhatsAppChat';
 
 function fetchWithAuth(url, options = {}) {
   const token = localStorage.getItem('investorToken');
@@ -13,59 +17,7 @@ function fetchWithAuth(url, options = {}) {
   });
 }
 
-function Modal({ open, onClose, children }) {
-  if (!open) return null;
-  return (
-    <div
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 9999
-      }}
-      onClick={onClose}
-    >
-      <div
-        style={{
-          backgroundColor: 'white',
-          padding: '20px',
-          borderRadius: '8px',
-          maxWidth: '500px',
-          width: '90%',
-          maxHeight: '80vh',
-          overflow: 'auto',
-          position: 'relative'
-        }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button
-          onClick={onClose}
-          style={{
-            position: 'absolute',
-            top: '10px',
-            right: '10px',
-            background: 'none',
-            border: 'none',
-            fontSize: '24px',
-            cursor: 'pointer',
-            color: '#666'
-          }}
-        >
-          ×
-        </button>
-        <div style={{ paddingRight: '30px' }}>
-          {children}
-        </div>
-      </div>
-    </div>
-  );
-}
+
 
 export default function InvestorDashboardNew() {
   const [startups, setStartups] = useState([]);
@@ -83,6 +35,8 @@ export default function InvestorDashboardNew() {
   const [editForm, setEditForm] = useState(null);
   const [editError, setEditError] = useState('');
   const [editLoading, setEditLoading] = useState(false);
+  const [showChat, setShowChat] = useState(false);
+  const [selectedStartup, setSelectedStartup] = useState(null);
   const navigate = useNavigate();
   const toast = useToast();
 
@@ -254,60 +208,74 @@ export default function InvestorDashboardNew() {
   }
 
   return (
-    <div className="min-h-screen bg-[#10182A] px-2 sm:px-0 py-4 sm:py-8">
-
+    <div className="min-h-screen bg-[#10182A] p-8">
+      <div className="flex justify-between items-center mb-8">
+        <h2 className="text-3xl font-light text-center text-white">
+          Дашборд инвестора
+        </h2>
+      </div>
       
       {/* Профиль инвестора */}
-      <div className="max-w-2xl mx-auto mb-6 sm:mb-8 p-4 sm:p-6 bg-[#F5F6FA] rounded-lg shadow relative">
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-2 gap-2">
-          <h3 className="text-lg sm:text-xl font-bold text-[#10182A]">
+      <div className="max-w-7xl mx-auto mb-6 sm:mb-8 p-4 sm:p-6 bg-white rounded-lg shadow-lg relative">
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-2">
+          <h3 className="text-lg sm:text-xl font-light text-[#10182A]">
             Мой профиль
           </h3>
-          <button
-            onClick={handleEditOpen}
-            className="text-gray-500 hover:text-[#FFD700] hover:underline text-xs font-semibold transition px-3 py-1 rounded absolute right-4 bottom-4"
-            style={{ minWidth: 'auto' }}
-          >
-            Редактировать
-          </button>
+          <div className="flex items-center space-x-3">
+            <Link
+              to="/analytics"
+              className="text-[#3B82F6] hover:text-blue-800 text-xs font-light transition px-3 py-1 rounded bg-blue-50 hover:bg-blue-100 flex items-center space-x-1"
+            >
+              <Icon name="dashboard" size={14} color="black" />
+              <span>Аналитика</span>
+            </Link>
+            <button
+              onClick={handleEditOpen}
+              className="text-gray-500 hover:text-[#3B82F6] hover:underline text-xs font-light transition px-3 py-1 rounded absolute right-4 bottom-4 flex items-center space-x-1"
+              style={{ minWidth: 'auto' }}
+            >
+              <Icon name="edit" size={14} color="black" />
+              <span>Редактировать</span>
+            </button>
+          </div>
         </div>
         {(!profile) ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 sm:gap-x-8 gap-y-2 text-xs sm:text-sm opacity-60">
-            <div><b>Имя:</b> Murod</div>
-            <div><b>Тип:</b> —</div>
-            <div><b>Email:</b> dizozavr@gmail.com</div>
-            <div><b>Инвестиционный диапазон:</b> 2000 — 50000</div>
-            <div><b>Интересы:</b> AI, SaaS</div>
-            <div><b>Стадии:</b> —</div>
-            <div><b>Гео-фокус:</b> —</div>
-            <div><b>Тип сделки:</b> —</div>
-            <div><b>Публичный профиль:</b> Нет</div>
-            <div><b>Telegram:</b> —</div>
-            <div><b>Биография:</b> —</div>
-            <div><b>LinkedIn:</b> —</div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 sm:gap-x-8 gap-y-3 text-sm font-light text-gray-900">
+            <div className="flex items-center space-x-2"><Icon name="user" size={16} color="black" /><span><span className="font-medium">Имя:</span> Murod</span></div>
+            <div className="flex items-center space-x-2"><Icon name="award" size={16} color="black" /><span><span className="font-medium">Тип:</span> —</span></div>
+            <div className="flex items-center space-x-2"><Icon name="email" size={16} color="black" /><span><span className="font-medium">Email:</span> dizozavr@gmail.com</span></div>
+            <div className="flex items-center space-x-2"><Icon name="dashboard" size={16} color="black" /><span><span className="font-medium">Инвестиционный диапазон:</span> 2000 — 50000</span></div>
+            <div className="flex items-center space-x-2"><Icon name="heart" size={16} color="black" /><span><span className="font-medium">Интересы:</span> AI, SaaS</span></div>
+            <div className="flex items-center space-x-2"><Icon name="compass" size={16} color="black" /><span><span className="font-medium">Стадии:</span> —</span></div>
+            <div className="flex items-center space-x-2"><Icon name="location" size={16} color="black" /><span><span className="font-medium">Гео-фокус:</span> —</span></div>
+            <div className="flex items-center space-x-2"><Icon name="file" size={16} color="black" /><span><span className="font-medium">Тип сделки:</span> —</span></div>
+            <div className="flex items-center space-x-2"><Icon name="eye" size={16} color="black" /><span><span className="font-medium">Публичный профиль:</span> Нет</span></div>
+            <div className="flex items-center space-x-2"><Icon name="chat" size={16} color="black" /><span><span className="font-medium">Telegram:</span> —</span></div>
+            <div className="flex items-center space-x-2"><Icon name="file" size={16} color="black" /><span><span className="font-medium">Биография:</span> —</span></div>
+            <div className="flex items-center space-x-2"><Icon name="user" size={16} color="black" /><span><span className="font-medium">LinkedIn:</span> —</span></div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 sm:gap-x-8 gap-y-2 text-xs sm:text-sm">
-            <div><b>Имя:</b> {profile.name || '—'}</div>
-            <div><b>Тип:</b> {profile.investorType || '—'}</div>
-            <div><b>Email:</b> {profile.email || '—'}</div>
-            <div><b>Инвестиционный диапазон:</b> {profile.investmentRange ? `${profile.investmentRange.min} — ${profile.investmentRange.max}` : '—'}</div>
-            <div><b>Интересы:</b> {profile.interests ? profile.interests.join(', ') : '—'}</div>
-            <div><b>Стадии:</b> {profile.preferredStages ? profile.preferredStages.join(', ') : '—'}</div>
-            <div><b>Гео-фокус:</b> {profile.geoFocus ? profile.geoFocus.join(', ') : '—'}</div>
-            <div><b>Тип сделки:</b> {profile.dealType ? profile.dealType.join(', ') : '—'}</div>
-            <div><b>Публичный профиль:</b> {profile.publicProfile ? 'Да' : 'Нет'}</div>
-            <div><b>Telegram:</b> {profile.contactLinks?.telegram || '—'}</div>
-            <div><b>Биография:</b> {profile.bio || '—'}</div>
-            <div><b>LinkedIn:</b> {profile.contactLinks?.linkedin || '—'}</div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 sm:gap-x-8 gap-y-3 text-sm font-light text-gray-900">
+            <div className="flex items-center space-x-2"><Icon name="user" size={16} color="black" /><span><span className="font-medium">Имя:</span> {profile.name || '—'}</span></div>
+            <div className="flex items-center space-x-2"><Icon name="award" size={16} color="black" /><span><span className="font-medium">Тип:</span> {profile.investorType || '—'}</span></div>
+            <div className="flex items-center space-x-2"><Icon name="email" size={16} color="black" /><span><span className="font-medium">Email:</span> {profile.email || '—'}</span></div>
+            <div className="flex items-center space-x-2"><Icon name="dashboard" size={16} color="black" /><span><span className="font-medium">Инвестиционный диапазон:</span> {profile.investmentRange ? `${profile.investmentRange.min} — ${profile.investmentRange.max}` : '—'}</span></div>
+            <div className="flex items-center space-x-2"><Icon name="heart" size={16} color="black" /><span><span className="font-medium">Интересы:</span> {profile.interests ? profile.interests.join(', ') : '—'}</span></div>
+            <div className="flex items-center space-x-2"><Icon name="compass" size={16} color="black" /><span><span className="font-medium">Стадии:</span> {profile.preferredStages ? profile.preferredStages.join(', ') : '—'}</span></div>
+            <div className="flex items-center space-x-2"><Icon name="location" size={16} color="black" /><span><span className="font-medium">Гео-фокус:</span> {profile.geoFocus ? profile.geoFocus.join(', ') : '—'}</span></div>
+            <div className="flex items-center space-x-2"><Icon name="file" size={16} color="black" /><span><span className="font-medium">Тип сделки:</span> {profile.dealType ? profile.dealType.join(', ') : '—'}</span></div>
+            <div className="flex items-center space-x-2"><Icon name="eye" size={16} color="black" /><span><span className="font-medium">Публичный профиль:</span> {profile.publicProfile ? 'Да' : 'Нет'}</span></div>
+            <div className="flex items-center space-x-2"><Icon name="chat" size={16} color="black" /><span><span className="font-medium">Telegram:</span> {profile.contactLinks?.telegram || '—'}</span></div>
+            <div className="flex items-center space-x-2"><Icon name="file" size={16} color="black" /><span><span className="font-medium">Биография:</span> {profile.bio || '—'}</span></div>
+            <div className="flex items-center space-x-2"><Icon name="user" size={16} color="black" /><span><span className="font-medium">LinkedIn:</span> {profile.contactLinks?.linkedin || '—'}</span></div>
           </div>
         )}
       </div>
 
       {/* Модальное окно редактирования профиля */}
       <Modal open={editOpen} onClose={() => setEditOpen(false)}>
-        <form onSubmit={handleEditSubmit} className="space-y-4">
-          <h2 className="text-xl font-bold mb-4">Редактировать профиль</h2>
+        <form onSubmit={handleEditSubmit} className="space-y-4 text-gray-900">
+          <h2 className="text-xl font-light mb-4 text-gray-900">Редактировать профиль</h2>
           {editError && <div className="text-red-600 text-sm">{editError}</div>}
           
           <div>
@@ -471,14 +439,14 @@ export default function InvestorDashboardNew() {
             <button
               type="submit"
               disabled={editLoading}
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+              className="px-4 py-2 bg-[#3B82F6] text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 font-light transition-colors"
             >
               {editLoading ? 'Сохранение...' : 'Сохранить'}
             </button>
             <button
               type="button"
               onClick={() => setEditOpen(false)}
-              className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
+              className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 font-light transition-colors"
             >
               Отмена
             </button>
@@ -487,39 +455,41 @@ export default function InvestorDashboardNew() {
       </Modal>
 
       {/* Фильтры и поиск */}
-      <div className="max-w-2xl mx-auto mb-4 flex flex-col sm:flex-row gap-2 sm:gap-4 items-stretch">
-        <select
-          className="px-3 py-2 border rounded text-xs sm:text-base w-full sm:w-auto"
-          value={filter.industry}
-          onChange={e => setFilter(f => ({ ...f, industry: e.target.value }))}
-        >
-          <option value="">Все индустрии</option>
-          {industries.map(ind => <option key={ind} value={ind}>{ind}</option>)}
-        </select>
-        <input
-          className="px-3 py-2 border rounded text-xs sm:text-base w-full sm:w-auto"
-          type="text"
-          placeholder="Поиск по названию"
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          style={{ minWidth: '220px', flexGrow: 1 }}
-        />
-        <button
-          className="px-3 py-2 bg-[#FFD700] text-[#10182A] rounded font-semibold hover:bg-yellow-400 transition text-xs sm:text-base w-full sm:w-auto"
-          style={{ minWidth: '90px', height: '40px', alignSelf: 'center' }}
-          onClick={() => { setFilter({ industry: '', location: '' }); setSearch(''); }}
-          type="button"
-        >
-          Сбросить
-        </button>
- 
-
+      <div className="max-w-7xl mx-auto mb-6 p-4 bg-white rounded-lg shadow-lg">
+        <div className="flex flex-col sm:flex-row gap-3 items-stretch">
+          <select
+            className="px-3 py-2 border border-gray-200 rounded text-sm font-light w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-[#3B82F6] text-gray-900"
+            value={filter.industry}
+            onChange={e => setFilter(f => ({ ...f, industry: e.target.value }))}
+          >
+            <option value="">Все индустрии</option>
+            {industries.map(ind => <option key={ind} value={ind}>{ind}</option>)}
+          </select>
+          <input
+            className="px-3 py-2 border border-gray-200 rounded text-sm font-light w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-[#3B82F6] text-gray-900 placeholder-gray-500"
+            type="text"
+            placeholder="Поиск по названию"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            style={{ minWidth: '220px', flexGrow: 1 }}
+          />
+          <button
+            className="px-3 py-2 bg-[#3B82F6] text-white rounded font-light hover:bg-blue-700 transition-colors text-sm w-full sm:w-auto flex items-center justify-center space-x-2"
+            style={{ minWidth: '90px', height: '40px', alignSelf: 'center' }}
+            onClick={() => { setFilter({ industry: '', location: '' }); setSearch(''); }}
+            type="button"
+          >
+            <Icon name="search" size={16} color="white" />
+            <span>Сбросить</span>
+          </button>
+        </div>
       </div>
-      {error && <div className="mb-4 text-red-600 text-center">{error}</div>}
+      
+      {error && <div className="mb-4 text-red-600 text-center font-light">{error}</div>}
       {loading ? (
-        <div className="text-center">Загрузка...</div>
+        <div className="text-center text-gray-700 font-light">Загрузка...</div>
       ) : startups.length === 0 ? (
-        <div className="text-center text-gray-500">
+        <div className="text-center text-gray-700 font-light">
           Нет доступных стартапов (количество: {startups.length})
           <br />
           <button 
@@ -527,66 +497,77 @@ export default function InvestorDashboardNew() {
               console.log('Попытка загрузки стартапов');
               loadStartups();
             }}
-            className="px-3 py-1 bg-blue-600 text-white rounded mt-2"
+            className="px-3 py-1 bg-[#3B82F6] text-white rounded mt-2 font-light transition-colors"
           >
             Загрузить заново
           </button>
         </div>
       ) : (
-        <div className="max-w-2xl mx-auto p-4 sm:p-6 bg-[#F5F6FA] rounded-lg shadow overflow-x-auto">
-          <table className="min-w-full border">
+        <div className="max-w-7xl mx-auto p-4 sm:p-6 bg-white rounded-lg shadow-lg overflow-x-auto">
+          <table className="min-w-full border border-gray-200 rounded-lg overflow-hidden">
             <thead>
-              <tr className="bg-gray-100 text-[#10182A]">
-                <th className="p-2 border">Название</th>
-                <th className="p-2 border">Описание</th>
-                <th className="p-2 border">Индустрия</th>
-                <th className="p-2 border">Сумма</th>
-                <th className="p-2 border">Pitch Deck</th>
-                <th className="p-2 border">Действия</th>
+              <tr className="bg-gray-50">
+                <th className="p-3 border-b border-gray-200 text-left text-sm font-semibold text-gray-900">Название</th>
+                <th className="p-3 border-b border-gray-200 text-left text-sm font-semibold text-gray-900">Описание</th>
+                <th className="p-3 border-b border-gray-200 text-left text-sm font-semibold text-gray-900">Индустрия</th>
+                <th className="p-3 border-b border-gray-200 text-left text-sm font-semibold text-gray-900">Сумма</th>
+                <th className="p-3 border-b border-gray-200 text-left text-sm font-semibold text-gray-900">Pitch Deck</th>
+                <th className="p-3 border-b border-gray-200 text-left text-sm font-semibold text-gray-900">Действия</th>
               </tr>
             </thead>
             <tbody>
               {filteredStartups().map((st, idx) => {
                 console.log('Рендерим стартап:', st.name, 'ID:', st._id);
                 return (
-                  <tr key={st._id} className={idx % 2 === 0 ? 'bg-white' : 'bg-[#F5F6FA]'}>
-                  <td className="p-2 border text-[#10182A]">{st.name}</td>
-                  <td className="p-2 border text-[#10182A]">{st.description}</td>
-                  <td className="p-2 border text-[#10182A]">{st.industry}</td>
-                  <td className="p-2 border text-[#10182A]">{st.fundingAmount}</td>
-                  <td className="p-2 border text-[#10182A]">
+                  <tr key={st._id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                  <td className="p-3 text-sm font-medium text-gray-900">{st.name}</td>
+                  <td className="p-3 text-sm font-medium text-gray-900">{st.description}</td>
+                  <td className="p-3 text-sm font-medium text-gray-900">{st.industry}</td>
+                  <td className="p-3 text-sm font-medium text-gray-900">{st.fundingAmount}</td>
+                  <td className="p-3 text-sm font-medium text-gray-900">
                     {st.pitchDeckUrl ? (
-                      <a href={st.pitchDeckUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Смотреть</a>
+                      <a href={st.pitchDeckUrl} target="_blank" rel="noopener noreferrer" className="text-[#3B82F6] hover:underline font-light">Смотреть</a>
                     ) : (
-                      <span className="text-gray-400">—</span>
+                      <span className="text-gray-500">—</span>
                     )}
                   </td>
 
-                  <td className="p-2 border flex gap-2">
+                  <td className="p-3 flex gap-2">
                     <button
-                      className="px-2 py-1 rounded bg-gray-200 hover:bg-gray-300 text-[#10182A] text-lg"
+                      className="p-2 rounded bg-gray-100 hover:bg-gray-200 text-[#10182A] transition-colors"
                       title="Добавить в избранное"
                       onClick={() => handleInterested(st._id)}
                       style={{ background: interested[st._id] ? '#FFD700' : undefined, color: interested[st._id] ? '#10182A' : undefined }}
-                    >⭐</button>
+                    >
+                      <Icon name="favorite" size={16} color="black" />
+                    </button>
                     <button
-                      className="px-2 py-1 rounded bg-gray-200 hover:bg-gray-300 text-[#10182A] text-lg"
+                      className="p-2 rounded bg-gray-100 hover:bg-gray-200 text-[#10182A] transition-colors"
                       title="Скрыть проект"
                       onClick={() => toast.showToast('Проект скрыт (заглушка)', 'info')}
-                    >👎</button>
+                    >
+                      <Icon name="minus" size={16} color="black" />
+                    </button>
                     <button
-                      className="px-2 py-1 rounded bg-gray-200 hover:bg-gray-300 text-[#10182A] text-lg"
+                      className="p-2 rounded bg-gray-100 hover:bg-gray-200 text-[#10182A] transition-colors"
                       title="Начать чат со стартапером"
-                      onClick={() => toast.showToast('Окно чата (заглушка)', 'info')}
-                    >💬</button>
+                      onClick={() => {
+                        setSelectedStartup(st);
+                        setShowChat(true);
+                      }}
+                    >
+                      <Icon name="chat" size={16} color="black" />
+                    </button>
                     <button
-                      className="px-2 py-1 rounded bg-blue-200 hover:bg-blue-300 text-blue-800 text-lg font-bold"
+                      className="p-2 rounded bg-[#3B82F6] hover:bg-blue-700 text-white transition-colors"
                       title="Подробная информация о стартапе"
                       onClick={() => {
                         console.log('Открываем детали стартапа:', st.name);
                         setModalStartup(st);
                       }}
-                    >❗</button>
+                    >
+                      <Icon name="eye" size={16} color="white" />
+                    </button>
                   </td>
                 </tr>
                 );
@@ -598,40 +579,55 @@ export default function InvestorDashboardNew() {
       {/* Модальное окно для стартапа */}
       <Modal open={!!modalStartup} onClose={() => setModalStartup(null)}>
         {modalStartup && (
-          <div>
-            <h2 className="text-xl font-bold mb-4">Информация о стартапе</h2>
-            <div className="mb-2"><b>Название:</b> {modalStartup.name || '—'}</div>
-            <div className="mb-2"><b>Email:</b> {modalStartup.email || '—'}</div>
-            <div className="mb-2"><b>Описание:</b> {modalStartup.description || '—'}</div>
-            <div className="mb-2"><b>Индустрия:</b> {modalStartup.industry || '—'}</div>
-            <div className="mb-2"><b>Локация:</b> {modalStartup.location || '—'}</div>
-            <div className="mb-2"><b>Сумма финансирования:</b> {modalStartup.fundingAmount || '—'}</div>
-            {modalStartup.stage && <div className="mb-2"><b>Стадия:</b> {modalStartup.stage}</div>}
-            {modalStartup.problem && <div className="mb-2"><b>Проблема:</b> {modalStartup.problem}</div>}
-            {modalStartup.solution && <div className="mb-2"><b>Решение:</b> {modalStartup.solution}</div>}
-            {modalStartup.team && (
-              <div className="mb-2">
-                <b>Команда:</b> {Array.isArray(modalStartup.team) 
-                  ? modalStartup.team.map((member, index) => 
-                      `${member.name || 'Без имени'}${member.role ? ` (${member.role})` : ''}`
-                    ).join(', ')
-                  : String(modalStartup.team)
-                }
-              </div>
-            )}
-            {modalStartup.pitchDeckUrl && (
-              <div className="mb-2">
-                <b>Pitch Deck:</b> <a href={modalStartup.pitchDeckUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Скачать</a>
-              </div>
-            )}
-            {modalStartup.website && (
-              <div className="mb-2">
-                <b>Веб-сайт:</b> <a href={modalStartup.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{modalStartup.website}</a>
-              </div>
-            )}
+          <div className="text-gray-900">
+            <h2 className="text-xl font-light mb-4 text-gray-900">Информация о стартапе</h2>
+            <div className="space-y-3 text-sm font-light text-gray-900">
+              <div className="flex items-center space-x-2"><Icon name="database" size={16} color="black" /><span><span className="font-medium">Название:</span> {modalStartup.name || '—'}</span></div>
+              <div className="flex items-center space-x-2"><Icon name="email" size={16} color="black" /><span><span className="font-medium">Email:</span> {modalStartup.email || '—'}</span></div>
+              <div className="flex items-center space-x-2"><Icon name="file" size={16} color="black" /><span><span className="font-medium">Описание:</span> {modalStartup.description || '—'}</span></div>
+              <div className="flex items-center space-x-2"><Icon name="compass" size={16} color="black" /><span><span className="font-medium">Индустрия:</span> {modalStartup.industry || '—'}</span></div>
+              <div className="flex items-center space-x-2"><Icon name="location" size={16} color="black" /><span><span className="font-medium">Локация:</span> {modalStartup.location || '—'}</span></div>
+              <div className="flex items-center space-x-2"><Icon name="dashboard" size={16} color="black" /><span><span className="font-medium">Сумма финансирования:</span> {modalStartup.fundingAmount || '—'}</span></div>
+              {modalStartup.stage && <div className="flex items-center space-x-2"><Icon name="award" size={16} color="black" /><span><span className="font-medium">Стадия:</span> {modalStartup.stage}</span></div>}
+              {modalStartup.problem && <div className="flex items-center space-x-2"><Icon name="flag" size={16} color="black" /><span><span className="font-medium">Проблема:</span> {modalStartup.problem}</span></div>}
+              {modalStartup.solution && <div className="flex items-center space-x-2"><Icon name="check" size={16} color="black" /><span><span className="font-medium">Решение:</span> {modalStartup.solution}</span></div>}
+                              {modalStartup.team && (
+                  <div className="flex items-center space-x-2">
+                    <Icon name="user" size={16} color="black" />
+                    <span><span className="font-medium">Команда:</span> {Array.isArray(modalStartup.team) 
+                      ? modalStartup.team.map((member, index) => 
+                          `${member.name || 'Без имени'}${member.role ? ` (${member.role})` : ''}`
+                        ).join(', ')
+                      : String(modalStartup.team)
+                    }</span>
+                  </div>
+                )}
+                {modalStartup.pitchDeckUrl && (
+                  <div className="flex items-center space-x-2">
+                    <Icon name="download" size={16} color="black" />
+                    <span><span className="font-medium">Pitch Deck:</span> <a href={modalStartup.pitchDeckUrl} target="_blank" rel="noopener noreferrer" className="text-[#3B82F6] hover:underline">Скачать</a></span>
+                  </div>
+                )}
+                {modalStartup.website && (
+                  <div className="flex items-center space-x-2">
+                    <Icon name="view" size={16} color="black" />
+                    <span><span className="font-medium">Веб-сайт:</span> <a href={modalStartup.website} target="_blank" rel="noopener noreferrer" className="text-[#3B82F6] hover:underline">{modalStartup.website}</a></span>
+                  </div>
+                )}
+            </div>
           </div>
         )}
       </Modal>
+
+      {/* Новый чат в стиле WhatsApp */}
+      {showChat && (
+        <div className="fixed inset-0 z-50">
+          <WhatsAppChat 
+            startupData={selectedStartup} 
+            onClose={() => setShowChat(false)}
+          />
+        </div>
+      )}
     </div>
   );
 } 

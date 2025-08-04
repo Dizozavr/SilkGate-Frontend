@@ -1,95 +1,153 @@
 import React from 'react';
+import Icon from '../components/Shared/Icon';
 
 export default function Contacts() {
   return (
-    <div className="min-h-screen bg-[#10182A] py-10 px-2 sm:px-6">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-white mb-4 font-['Playfair_Display']">Контакты</h1>
-        <p className="text-lg text-gray-300 mb-10 max-w-2xl font-['Inter']">Свяжитесь с нами любым удобным способом. Мы всегда готовы помочь!</p>
+    <div className="min-h-screen bg-[#10182A] pt-20">
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        {/* Заголовок */}
+        <div className="mb-12">
+          <h1 className="text-3xl md:text-4xl font-light text-white mb-4">
+            Контакты
+          </h1>
+          <p className="text-lg text-muted font-light max-w-2xl leading-tight">
+            Свяжитесь с нами любым удобным способом. Мы всегда готовы помочь и ответить на ваши вопросы.
+          </p>
+        </div>
         
-        <div className="grid md:grid-cols-2 gap-6 mb-8">
-          <div className="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-shadow duration-300">
-            <h2 className="text-xl font-bold text-blue-600 mb-4 font-['Playfair_Display']">Общие вопросы</h2>
-            <div className="space-y-3 font-['Inter'] text-gray-700">
-              <div className="flex items-center gap-3">
-                <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                <span>info@silkgate.com</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
-                <span>+7 (XXX) XXX-XX-XX</span>
-              </div>
+        {/* Основные контакты */}
+        <div className="grid md:grid-cols-2 gap-8 mb-12">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+            <div className="flex items-center mb-6">
+              <Icon name="email" size={32} className="mr-4" />
+              <h2 className="text-xl font-light text-gray-900">Email</h2>
             </div>
+            <p className="text-gray-600 text-sm font-light leading-tight mb-4">
+              Напишите нам на почту для получения подробной информации
+            </p>
+            <a 
+              href="mailto:info@silkgate.com" 
+              className="text-blue-600 text-sm font-light hover:underline"
+            >
+              info@silkgate.com
+            </a>
           </div>
-
-          <div className="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-shadow duration-300">
-            <h2 className="text-xl font-bold text-blue-600 mb-4 font-['Playfair_Display']">Техническая поддержка</h2>
-            <div className="space-y-3 font-['Inter'] text-gray-700">
-              <div className="flex items-center gap-3">
-                <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                <span>support@silkgate.com</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                </svg>
-                <span>Telegram: @silkgate_support</span>
-              </div>
+          
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+            <div className="flex items-center mb-6">
+              <Icon name="phone" size={32} className="mr-4" />
+              <h2 className="text-xl font-light text-gray-900">Телефон</h2>
             </div>
+            <p className="text-gray-600 text-sm font-light leading-tight mb-4">
+              Позвоните нам для быстрого решения вопросов
+            </p>
+            <a 
+              href="tel:+74951234567" 
+              className="text-blue-600 text-sm font-light hover:underline"
+            >
+              +7 (495) 123-45-67
+            </a>
           </div>
         </div>
-
-        <div className="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-shadow duration-300">
-          <h2 className="text-xl font-bold text-blue-600 mb-4 font-['Playfair_Display']">Форма обратной связи</h2>
-          <form className="space-y-4 font-['Inter']">
-            <div className="grid md:grid-cols-2 gap-4">
+        
+        {/* Форма обратной связи */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 mb-12">
+          <h2 className="text-xl font-light text-gray-900 mb-6">Форма обратной связи</h2>
+          <form className="space-y-6">
+            <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Имя</label>
-                <input 
-                  type="text" 
-                  className="w-full rounded-lg px-4 py-3 border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-gray-700 placeholder-gray-500"
+                <label className="block text-sm font-light text-gray-700 mb-2">
+                  Имя
+                </label>
+                <input
+                  type="text"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-light"
                   placeholder="Ваше имя"
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Email</label>
-                <input 
-                  type="email" 
-                  className="w-full rounded-lg px-4 py-3 border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-gray-700 placeholder-gray-500"
+                <label className="block text-sm font-light text-gray-700 mb-2">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-light"
                   placeholder="your@email.com"
                 />
               </div>
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Тема</label>
-              <select className="w-full rounded-lg px-4 py-3 border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-gray-700">
-                <option>Общий вопрос</option>
-                <option>Техническая поддержка</option>
-                <option>Партнерство</option>
-                <option>Жалоба</option>
-                <option>Другое</option>
-              </select>
+              <label className="block text-sm font-light text-gray-700 mb-2">
+                Тема
+              </label>
+              <input
+                type="text"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-light"
+                placeholder="Тема сообщения"
+              />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Сообщение</label>
-              <textarea 
-                className="w-full rounded-lg px-4 py-3 border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-gray-700 placeholder-gray-500 min-h-[120px]"
-                placeholder="Опишите ваш вопрос или предложение..."
-              ></textarea>
+              <label className="block text-sm font-light text-gray-700 mb-2">
+                Сообщение
+              </label>
+              <textarea
+                rows={4}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-light"
+                placeholder="Ваше сообщение..."
+              />
             </div>
-            <button 
-              type="submit" 
-              className="px-6 py-3 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
+            <button
+              type="submit"
+              className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors font-light"
             >
               Отправить сообщение
             </button>
           </form>
+        </div>
+        
+        {/* Дополнительная информация */}
+        <div className="grid md:grid-cols-3 gap-6">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div className="flex items-center mb-4">
+              <Icon name="location" size={24} className="mr-3" />
+              <h3 className="text-lg font-light text-gray-900">Адрес</h3>
+            </div>
+            <p className="text-gray-600 text-sm font-light leading-tight">
+              Москва, ул. Примерная, д. 123<br />
+              Бизнес-центр "Инновации"
+            </p>
+          </div>
+          
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div className="flex items-center mb-4">
+              <Icon name="time" size={24} className="mr-3" />
+              <h3 className="text-lg font-light text-gray-900">Время работы</h3>
+            </div>
+            <p className="text-gray-600 text-sm font-light leading-tight">
+              Пн-Пт: 9:00 - 18:00<br />
+              Сб-Вс: Выходной
+            </p>
+          </div>
+          
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div className="flex items-center mb-4">
+              <Icon name="chat" size={24} className="mr-3" />
+              <h3 className="text-lg font-light text-gray-900">Поддержка</h3>
+            </div>
+            <p className="text-gray-600 text-sm font-light leading-tight">
+              Онлайн чат доступен<br />
+              24/7 для клиентов
+            </p>
+          </div>
+        </div>
+        
+        {/* Демо-информация */}
+        <div className="mt-12 p-6 bg-card border border-border rounded-lg">
+          <h3 className="text-lg font-light text-white mb-4">Демо-версия</h3>
+          <p className="text-muted text-sm font-light leading-tight">
+            Это демо-страница контактов. В полной версии здесь будет рабочая форма обратной связи, 
+            реальные контактные данные и интеграция с системой поддержки.
+          </p>
         </div>
       </div>
     </div>

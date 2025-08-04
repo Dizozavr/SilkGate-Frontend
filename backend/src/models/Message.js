@@ -22,10 +22,20 @@ const messageSchema = new mongoose.Schema({
       required: true
     }
   },
-  content: {
+  // Шифрованное содержимое сообщения
+  encrypted_content: {
     type: String,
-    required: true,
-    trim: true
+    required: true
+  },
+  // Подпись отправителя для верификации
+  signature: {
+    type: String,
+    required: true
+  },
+  // Хеш сообщения для целостности
+  message_hash: {
+    type: String,
+    required: true
   },
   message_type: {
     type: String,

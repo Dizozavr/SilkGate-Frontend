@@ -37,12 +37,12 @@ const ChatBotIcon = ({ onOpen }) => {
     <div className="fixed bottom-6 right-6 z-50">
       <button
         onClick={handleClick}
-        className="relative bg-[#FFD700] hover:bg-yellow-400 text-[#1a365d] rounded-full p-4 shadow-lg transition-all duration-300 transform hover:scale-110"
+        className="relative bg-white hover:bg-gray-50 text-[#3B82F6] rounded-full p-4 shadow-lg border border-gray-200 transition-all duration-300 transform hover:scale-110"
         title="Чат поддержки"
       >
         {/* Иконка чата */}
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
         </svg>
 
         {/* Индикатор непрочитанных сообщений */}
@@ -53,7 +53,7 @@ const ChatBotIcon = ({ onOpen }) => {
         )}
 
         {/* Анимация пульсации */}
-        <div className="absolute inset-0 bg-[#FFD700] rounded-full animate-ping opacity-20"></div>
+        <div className="absolute inset-0 bg-[#3B82F6] rounded-full animate-ping opacity-20"></div>
       </button>
 
       {/* Подсказка */}

@@ -22,6 +22,7 @@ const jobRoutes = require('./routes/jobs');
 const newsRoutes = require('./routes/news');
 const subscriptionRoutes = require('./routes/subscriptions');
 const chatRoutes = require('./routes/chat');
+const adminChatRoutes = require('./routes/adminChat');
 
 app.use('/api/investors', investorRoutes);
 app.use('/api/startups', startupRoutes);
@@ -33,6 +34,7 @@ app.use('/api/jobs', jobRoutes);
 app.use('/api/news', newsRoutes);
 app.use('/api/subscriptions', subscriptionRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/admin/chat', adminChatRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'SilkGate backend is running.' });

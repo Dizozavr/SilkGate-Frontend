@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+import './styles/globals.css';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -26,7 +27,12 @@ import Products from './pages/Products';
 import Education from './pages/Education';
 import Success from './pages/Success';
 import Chat from './pages/Chat';
+import ChatDemo from './pages/ChatDemo';
+import Notifications from './pages/Notifications';
+import Analytics from './pages/Analytics';
 import ChatBot from './components/ChatBot/ChatBot';
+import WhatsAppChat from './components/Chat/WhatsAppChat';
+import { useNavigate } from 'react-router-dom';
 
 import Jobs from './pages/Jobs';
 import PostJob from './pages/PostJob';
@@ -43,6 +49,17 @@ import UserDashboard from './pages/UserDashboard';
 import UserProfile from './pages/UserProfile';
 import InvestorApplication from './pages/InvestorApplication';
 import StartupApplication from './pages/StartupApplication';
+
+// Компонент для маршрута чата с навигацией
+function ChatRoute() {
+  const navigate = useNavigate();
+  
+  const handleClose = () => {
+    navigate(-1); // Возвращаемся на предыдущую страницу
+  };
+  
+  return <WhatsAppChat onClose={handleClose} />;
+}
 
 function AppRoutes() {
   const location = useLocation();
@@ -150,7 +167,10 @@ function AppRoutes() {
         <Route path="/profile" element={<ProtectedRoute role="user"><UserProfile /></ProtectedRoute>} />
         <Route path="/investor-application" element={<ProtectedRoute role="user"><InvestorApplication /></ProtectedRoute>} />
         <Route path="/startup-application" element={<ProtectedRoute role="user"><StartupApplication /></ProtectedRoute>} />
-        <Route path="/chat" element={<ProtectedRoute role={['investor', 'startup', 'admin']}><Chat /></ProtectedRoute>} />
+        <Route path="/chat" element={<ProtectedRoute role={['investor', 'startup', 'admin']}><ChatRoute /></ProtectedRoute>} />
+        <Route path="/chat-demo" element={<ChatDemo />} />
+        <Route path="/notifications" element={<Notifications />} />
+        <Route path="/analytics" element={<Analytics />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />

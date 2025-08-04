@@ -1,113 +1,161 @@
 import React from 'react';
-
-// Функция для выбора изображения на основе ID семинара
-const getImageForSeminar = (seminarId) => {
-  const images = [
-    'news1.jpg', 'news2.jpg', 'news3.jpg', 'news4.jpg', 'news5.jpg', 'news6.jpg',
-    'svaz-svaz-podklucit-koncepcia-setevogo-edinenia.jpg',
-    '3d-rendering-sovremennogo-nizkopoligonal-nogo-dizaina-spletenia.jpg',
-    '3d-fon-soedinenia-s-nizkopoligonal-nymi-soedinitel-nymi-liniami-i-tockami.jpg',
-    'koncepcia-noutbuka-s-interfeisom-blue-hud.jpg',
-    'koncepcia-kollaza-avatara-metavselennoi.jpg',
-    'fonovyi-kollaz-programmirovania (3).jpg',
-    'biznesmen-derzasii-cifrovoi-ekran-kotoryi-sgeneriroval-globus.jpg',
-    'fonovyi-kollaz-programmirovania (2).jpg',
-    'fonovyi-kollaz-programmirovania (1).jpg',
-    'fonovyi-kollaz-programmirovania.jpg',
-    'fonovyi-kollaz-programmirovania (4).jpg',
-    'fonovyi-kollaz-programmirovania (5).jpg',
-    'fonovyi-kollaz-programmirovania (6).jpg',
-    'fonovyi-kollaz-programmirovania (7).jpg',
-    'fonovyi-kollaz-programmirovania (8).jpg',
-    'fonovyi-kollaz-programmirovania (9).jpg',
-    'fonovyi-kollaz-programmirovania (10).jpg',
-    'fonovyi-kollaz-programmirovania (11).jpg',
-    'fonovyi-kollaz-programmirovania (12).jpg',
-    'fonovyi-kollaz-programmirovania (13).jpg',
-    'fonovyi-kollaz-programmirovania (14).jpg',
-    'fonovyi-kollaz-programmirovania (15).jpg',
-    'fonovyi-kollaz-programmirovania (16).jpg',
-    'fonovyi-kollaz-programmirovania (17).jpg',
-    'fonovyi-kollaz-programmirovania (18).jpg',
-    'fonovyi-kollaz-programmirovania (19).jpg',
-    'fonovyi-kollaz-programmirovania (20).jpg',
-    'fonovyi-kollaz-programmirovania (21).jpg',
-    'krupnym-planom-biznesmen-s-cifrovym-plansetom.jpg'
-  ];
-  const hash = seminarId.toString().split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-  return images[hash % images.length];
-};
-
-const seminars = [
-  {
-    id: 1,
-    title: 'AI для стартапов',
-    date: '15.08.2024',
-    desc: 'Практический семинар по внедрению искусственного интеллекта в стартап-проекты.',
-  },
-  {
-    id: 2,
-    title: 'Венчурные инвестиции 2024',
-    date: '28.08.2024',
-    desc: 'Актуальные тренды и стратегии привлечения инвестиций.',
-  },
-];
-
-const events = [
-  {
-    id: 1,
-    title: 'Стартап-уикенд',
-    date: '05.09.2024',
-    desc: 'Интенсив для основателей и инвесторов. Нетворкинг, питчи, разборы кейсов.',
-  },
-  {
-    id: 2,
-    title: 'Онлайн-вебинар: Юридические аспекты сделок',
-    date: '12.09.2024',
-    desc: 'Всё о юридических нюансах инвестирования и стартап-структур.',
-  },
-];
+import Icon from '../components/Shared/Icon';
 
 export default function Education() {
+  const events = [
+    {
+      id: 1,
+      title: "AI для стартапов",
+      date: "15.08.2024",
+      time: "14:00 - 16:00",
+      description: "Практический семинар по внедрению искусственного интеллекта в стартап-проекты.",
+      speaker: "Алексей Петров",
+      category: "AI/ML",
+      image: "/news/3d-rendering-sovremennogo-nizkopoligonal-nogo-dizaina-spletenia.jpg"
+    },
+    {
+      id: 2,
+      title: "Финансовое моделирование",
+      date: "22.08.2024",
+      time: "15:00 - 17:00",
+      description: "Как правильно строить финансовые модели для привлечения инвестиций.",
+      speaker: "Мария Сидорова",
+      category: "Финансы",
+      image: "/news/koncepcia-noutbuka-s-interfeisom-blue-hud.jpg"
+    },
+    {
+      id: 3,
+      title: "Питчинг проектов",
+      date: "29.08.2024",
+      time: "16:00 - 18:00",
+      description: "Искусство презентации стартапа перед инвесторами и партнерами.",
+      speaker: "Дмитрий Козлов",
+      category: "Презентации",
+      image: "/news/svaz-svaz-podklucit-koncepcia-setevogo-edinenia.jpg"
+    }
+  ];
+
   return (
-    <div className="min-h-screen bg-[#10182A] py-10 px-2 sm:px-6">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-white mb-4 font-['Playfair_Display']">Образование</h1>
-        <p className="text-lg text-gray-300 mb-10 max-w-2xl font-['Inter']">SilkGate организует семинары, вебинары и мероприятия для развития стартапов и инвесторов. Следите за расписанием и присоединяйтесь!</p>
-
-        {/* Семинары */}
-        <h2 className="text-2xl font-bold text-white mb-6 font-['Playfair_Display']">Семинары и тренинги</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
-          {seminars.map((s) => (
-            <div key={s.id} className="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col hover:shadow-xl transition-shadow duration-300">
-              <div className="h-48 bg-gray-100 flex items-center justify-center overflow-hidden">
-                <img 
-                  src={`/news/${getImageForSeminar(s.id)}`} 
-                  alt={s.title} 
-                  className="object-cover w-full h-full hover:scale-105 transition-transform duration-300" 
-                />
-              </div>
-              <div className="p-6 flex-1 flex flex-col">
-                <h3 className="text-xl font-bold text-blue-600 mb-2 font-['Playfair_Display']">{s.title}</h3>
-                <div className="text-sm text-gray-500 mb-3 font-['Inter']">{s.date}</div>
-                <p className="text-gray-700 mb-4 flex-1 font-['Inter'] leading-relaxed">{s.desc}</p>
-                <button className="mt-auto px-6 py-3 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition font-['Inter']">Подробнее</button>
-              </div>
-            </div>
-          ))}
+    <div className="min-h-screen bg-[#10182A] pt-20">
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        {/* Заголовок */}
+        <div className="mb-12">
+          <h1 className="text-3xl md:text-4xl font-light text-white mb-4">
+            Образование
+          </h1>
+          <p className="text-lg text-muted font-light max-w-2xl leading-tight">
+            Семинары, мастер-классы и образовательные программы для развития ваших навыков в сфере стартапов и инвестиций.
+          </p>
         </div>
-
-        {/* Календарь событий */}
-        <h2 className="text-2xl font-bold text-white mb-6 font-['Playfair_Display']">Календарь событий</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
-          {events.map((e) => (
-            <div key={e.id} className="bg-white rounded-2xl shadow-lg p-6 flex flex-col hover:shadow-xl transition-shadow duration-300">
-              <div className="text-xl font-semibold text-blue-600 mb-2 font-['Playfair_Display']">{e.title}</div>
-              <div className="text-sm text-gray-500 mb-3 font-['Inter']">{e.date}</div>
-              <div className="text-gray-700 mb-4 flex-1 font-['Inter'] leading-relaxed">{e.desc}</div>
-              <button className="mt-auto px-6 py-3 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition self-start font-['Inter']">Подробнее</button>
+        
+        {/* Статистика */}
+        <div className="grid md:grid-cols-3 gap-6 mb-12">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center">
+            <div className="flex items-center justify-center mb-4">
+              <Icon name="user" size={32} />
             </div>
-          ))}
+            <h3 className="text-2xl font-light text-gray-900 mb-2">500+</h3>
+            <p className="text-gray-600 text-sm font-light leading-tight">Участников</p>
+          </div>
+          
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center">
+            <div className="flex items-center justify-center mb-4">
+              <Icon name="award" size={32} />
+            </div>
+            <h3 className="text-2xl font-light text-gray-900 mb-2">25+</h3>
+            <p className="text-gray-600 text-sm font-light leading-tight">Мероприятий</p>
+          </div>
+          
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center">
+            <div className="flex items-center justify-center mb-4">
+              <Icon name="heart" size={32} />
+            </div>
+            <h3 className="text-2xl font-light text-gray-900 mb-2">98%</h3>
+            <p className="text-gray-600 text-sm font-light leading-tight">Довольных участников</p>
+          </div>
+        </div>
+        
+        {/* Ближайшие события */}
+        <div className="mb-12">
+          <h2 className="text-2xl font-light text-white mb-8">Ближайшие события</h2>
+          <div className="grid gap-8">
+            {events.map((event) => (
+              <div key={event.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <div className="flex items-start gap-6">
+                  {/* Изображение */}
+                  <div className="flex-shrink-0">
+                    <div className="w-32 h-32 rounded-lg overflow-hidden">
+                      <img
+                        src={event.image}
+                        alt={event.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </div>
+                  
+                  {/* Контент */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-4 mb-3">
+                      <h3 className="text-xl font-light text-gray-900 leading-tight">
+                        {event.title}
+                      </h3>
+                      <span className="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-light rounded-full">
+                        {event.category}
+                      </span>
+                    </div>
+                    
+                    <p className="text-gray-600 text-sm font-light leading-tight mb-4">
+                      {event.description}
+                    </p>
+                    
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-6">
+                        <div className="flex items-center gap-2">
+                          <Icon name="time" size={16} />
+                          <span className="text-sm font-light text-gray-500">
+                            {event.date} • {event.time}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Icon name="user" size={16} />
+                          <span className="text-sm font-light text-gray-500">
+                            {event.speaker}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors font-light">
+                        Записаться
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        {/* Календарь событий */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 mb-12">
+          <div className="flex items-center mb-6">
+            <Icon name="time" size={32} className="mr-4" />
+            <h2 className="text-xl font-light text-gray-900">Календарь событий</h2>
+          </div>
+          <p className="text-gray-600 text-sm font-light leading-tight mb-6">
+            Следите за нашими образовательными мероприятиями и не пропускайте важные события.
+          </p>
+          <button className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-light">
+            Открыть календарь
+          </button>
+        </div>
+        
+        {/* Демо-информация */}
+        <div className="mt-12 p-6 bg-card border border-border rounded-lg">
+          <h3 className="text-lg font-light text-white mb-4">Демо-версия</h3>
+          <p className="text-muted text-sm font-light leading-tight">
+            Это демо-страница образования. В полной версии здесь будет календарь реальных мероприятий, 
+            система регистрации на семинары и интеграция с образовательными платформами.
+          </p>
         </div>
       </div>
     </div>

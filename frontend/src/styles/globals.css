@@ -1,0 +1,450 @@
+/* Импорт шрифтов */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&display=swap');
+
+/* Глобальные стили */
+* {
+  box-sizing: border-box;
+}
+
+/* Убираем синюю рамку при фокусе */
+*:focus {
+  outline: none !important;
+}
+
+button:focus,
+input:focus,
+textarea:focus,
+select:focus,
+a:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-weight: 300;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #10182A; /* Updated background */
+  color: #ffffff;
+}
+
+/* Тонкие шрифты для всех элементов */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 300;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: -0.02em;
+}
+
+p, span, div, button, input, textarea, select {
+  font-weight: 300;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Моноширинный шрифт для кода */
+code, pre {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-weight: 300;
+}
+
+/* Approved colors */
+:root {
+  --background: #10182A; /* Updated */
+  --foreground: #ffffff;
+  --muted: #a1a1aa;
+  --muted-foreground: #71717a;
+  --card: #ffffff; /* Updated */
+  --card-foreground: #10182A; /* Updated */
+  --popover: #ffffff; /* Updated */
+  --popover-foreground: #10182A; /* Updated */
+  --primary: #3B82F6; /* Updated */
+  --primary-foreground: #ffffff;
+  --secondary: #f8fafc; /* Updated */
+  --secondary-foreground: #10182A; /* Updated */
+  --accent: #f1f5f9; /* Updated */
+  --accent-foreground: #10182A; /* Updated */
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #e2e8f0; /* Updated */
+  --input: #e2e8f0; /* Updated */
+  --ring: #3B82F6;
+  --radius: 0.75rem;
+  
+  /* Gold gradients */
+  --gold-gradient: linear-gradient(135deg, #FFD700 0%, #FFA500 25%, #FF8C00 50%, #FFD700 75%, #FFF8DC 100%);
+  --gold-gradient-shine: linear-gradient(135deg, #FFD700 0%, #FFF8DC 25%, #FFD700 50%, #FFA500 75%, #FFD700 100%);
+  --gold-gradient-glow: linear-gradient(135deg, #FFD700 0%, #FFA500 30%, #FF8C00 60%, #FFD700 100%);
+  --gold-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+  --gold-shadow-glow: 0 0 40px rgba(255, 215, 0, 0.5);
+  
+  /* Градиенты */
+  --gradient-primary: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+  --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --gradient-dark: linear-gradient(135deg, #10182A 0%, #1e293b 100%);
+}
+
+/* Плавные переходы */
+* {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Современные тени */
+.shadow-sm {
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+.shadow {
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+}
+
+.shadow-md {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+.shadow-lg {
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.shadow-xl {
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+/* Стеклянный эффект */
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.glass-dark {
+  background: rgba(16, 24, 42, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Gradients */
+.gradient-primary {
+  background: var(--gradient-primary);
+}
+
+.gradient-secondary {
+  background: var(--gradient-secondary);
+}
+
+.gradient-accent {
+  background: var(--gradient-accent);
+}
+
+.gradient-dark {
+  background: var(--gradient-dark);
+}
+
+/* Gold effects */
+.gold-gradient {
+  background: var(--gold-gradient);
+  position: relative;
+  overflow: hidden;
+}
+.gold-gradient::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--gold-gradient-shine);
+  transition: left 0.6s ease-in-out;
+}
+.gold-gradient:hover::before {
+  left: 100%;
+}
+.gold-glow {
+  box-shadow: var(--gold-shadow);
+  transition: box-shadow 0.3s ease;
+}
+.gold-glow:hover {
+  box-shadow: var(--gold-shadow-glow);
+}
+.gold-text {
+  background: var(--gold-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: goldShine 3s ease-in-out infinite;
+}
+@keyframes goldShine {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+@keyframes goldPulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
+  }
+}
+.animate-gold-pulse {
+  animation: goldPulse 2s ease-in-out infinite;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(59, 130, 246, 0.6);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.6s ease-out;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+/* Modern shadows */
+.shadow-modern {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Modern buttons */
+.btn-primary {
+  @apply px-6 py-3 rounded-lg font-medium transition-all duration-300 relative overflow-hidden;
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  position: relative;
+}
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+.btn-primary:hover::before {
+  left: 100%;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+}
+
+.btn-secondary {
+  @apply px-6 py-3 rounded-lg font-medium transition-all duration-300;
+  background: transparent;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.btn-ghost {
+  @apply px-6 py-3 rounded-lg font-medium transition-all duration-300;
+  background: transparent;
+  color: var(--muted);
+  border: none;
+}
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+/* Gold button */
+.btn-gold {
+  @apply px-6 py-3 rounded-lg font-medium transition-all duration-300 relative overflow-hidden;
+  background: var(--gold-gradient);
+  color: #10182A;
+  border: none;
+  position: relative;
+  box-shadow: var(--gold-shadow);
+}
+.btn-gold::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--gold-gradient-shine);
+  transition: left 0.6s ease-in-out;
+}
+.btn-gold:hover::before {
+  left: 100%;
+}
+.btn-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--gold-shadow-glow);
+}
+
+/* Modern cards */
+.card {
+  @apply rounded-xl p-6;
+  background: var(--card); /* Updated */
+  color: var(--card-foreground); /* Updated */
+  border: 1px solid var(--border); /* Updated */
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  border-color: var(--primary); /* Updated */
+}
+
+.card-dark {
+  @apply rounded-xl p-6;
+  background: #1a2238; /* Updated background */
+  color: #ffffff;
+  border: 1px solid #374151;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+.card-dark:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  border-color: var(--primary);
+}
+
+/* Modern forms */
+.input {
+  @apply px-4 py-3 rounded-lg border transition-all duration-300;
+  background: var(--card); /* Updated */
+  border: 1px solid var(--border); /* Updated */
+  color: var(--card-foreground); /* Updated */
+  font-weight: 300;
+}
+.input:focus {
+  background: var(--card); /* Updated */
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.input::placeholder {
+  color: var(--muted);
+}
+
+/* Скроллбар */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Выделение текста */
+::selection {
+  background: var(--primary);
+  color: white;
+}
+
+/* Фокус для доступности */
+*:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Utility classes */
+.text-gradient {
+  background: linear-gradient(135deg, var(--primary), #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.border-gradient {
+  border: 1px solid;
+  border-image: linear-gradient(135deg, var(--primary), #8b5cf6) 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .card, .card-dark {
+    @apply p-4;
+  }
+  
+  .btn-primary, .btn-secondary, .btn-ghost, .btn-gold {
+    @apply px-4 py-2 text-sm;
+  }
+} 

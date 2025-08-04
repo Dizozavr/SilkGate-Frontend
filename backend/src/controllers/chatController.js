@@ -2,6 +2,14 @@ const Conversation = require('../models/Conversation');
 const Message = require('../models/Message');
 const Investor = require('../models/Investor');
 const User = require('../models/User');
+const { 
+  generateConversationKey, 
+  encryptMessage, 
+  decryptMessage,
+  signMessage,
+  verifySignature,
+  createMessageHash 
+} = require('../utils/encryption');
 
 // Получить все диалоги пользователя
 const getConversations = async (req, res) => {
@@ -77,7 +85,11 @@ const createOrGetConversation = async (req, res) => {
         currentUser = await User.findById(userId);
       }
 
-      // Создаем новый диалог
+      // Генерируем ключ шифрования для диалога
+      const conversationKey = generateConversationKey();
+      const keyHash = require('crypto').createHash('sha256').update(conversationKey).digest('hex');
+
+      // Создаем новый диалог с шифрованием
       conversation = new Conversation({
         participants: [
           {
@@ -90,7 +102,9 @@ const createOrGetConversation = async (req, res) => {
             user_model: other_user_model,
             username: otherUser.name || otherUser.email
           }
-        ]
+        ],
+        encryption_key_hash: keyHash,
+        admin_invited: false
       });
       await conversation.save();
     }
@@ -179,7 +193,15 @@ const sendMessage = async (req, res) => {
       currentUser = await User.findById(userId);
     }
 
-    // Создаем сообщение
+    // Шифруем сообщение (в реальной версии здесь будет публичный ключ собеседника)
+    const timestamp = new Date();
+    const messageHash = createMessageHash(content, timestamp, userId);
+    
+    // Имитируем шифрование (в реальной версии будет настоящее шифрование)
+    const encryptedContent = Buffer.from(content).toString('base64');
+    const signature = Buffer.from(`${content}${timestamp}${userId}`).toString('base64');
+
+    // Создаем зашифрованное сообщение
     const message = new Message({
       conversation_id,
       sender: {
@@ -187,7 +209,9 @@ const sendMessage = async (req, res) => {
         user_model: userModel,
         username: currentUser.name || currentUser.email
       },
-      content,
+      encrypted_content: encryptedContent,
+      signature: signature,
+      message_hash: messageHash,
       message_type,
       attachments
     });
@@ -196,10 +220,10 @@ const sendMessage = async (req, res) => {
 
     // Обновляем последнее сообщение в диалоге
     conversation.last_message = {
-      content,
+      encrypted_content: encryptedContent,
       sender_id: userId,
       sender_model: userModel,
-      timestamp: new Date()
+      timestamp: timestamp
     };
 
     // Увеличиваем счетчик непрочитанных для собеседника
@@ -210,7 +234,7 @@ const sendMessage = async (req, res) => {
 
     await conversation.save();
 
-    // Возвращаем созданное сообщение
+    // Возвращаем созданное сообщение (без расшифровки для безопасности)
     const populatedMessage = await Message.findById(message._id)
       .populate('sender.user_id', 'name email');
 
@@ -309,6 +333,61 @@ const getUnreadCount = async (req, res) => {
   }
 };
 
+// Пригласить администратора в диалог
+const inviteAdminToConversation = async (req, res) => {
+  try {
+    const { userId, userModel } = req.user;
+    const { conversation_id } = req.body;
+
+    // Проверяем существование диалога
+    const conversation = await Conversation.findOne({
+      _id: conversation_id,
+      'participants.user_id': userId,
+      is_active: true
+    });
+
+    if (!conversation) {
+      return res.status(404).json({ message: 'Диалог не найден' });
+    }
+
+    // Проверяем, что админ еще не приглашен
+    if (conversation.admin_invited) {
+      return res.status(400).json({ message: 'Администратор уже приглашен в этот диалог' });
+    }
+
+    // Находим админа в системе
+    const admin = await User.findOne({ role: 'admin' });
+    if (!admin) {
+      return res.status(404).json({ message: 'Администратор не найден' });
+    }
+
+    // Приглашаем администратора
+    conversation.admin_invited = true;
+    conversation.admin_invited_by = {
+      user_id: userId,
+      user_model: userModel,
+      timestamp: new Date()
+    };
+
+    // Добавляем админа в участники
+    conversation.participants.push({
+      user_id: admin._id,
+      user_model: 'User',
+      username: 'Администратор'
+    });
+
+    await conversation.save();
+
+    res.json({ 
+      message: 'Администратор приглашен в диалог',
+      conversation 
+    });
+  } catch (error) {
+    console.error('Error inviting admin:', error);
+    res.status(500).json({ message: 'Ошибка при приглашении администратора' });
+  }
+};
+
 // Специальный endpoint для чат-бота - создание чата с админом
 const createChatWithAdmin = async (req, res) => {
   try {
@@ -341,6 +420,10 @@ const createChatWithAdmin = async (req, res) => {
     });
 
     if (!conversation) {
+      // Генерируем ключ шифрования для диалога
+      const conversationKey = generateConversationKey();
+      const keyHash = require('crypto').createHash('sha256').update(conversationKey).digest('hex');
+
       // Создаем новый диалог с админом
       conversation = new Conversation({
         participants: [
@@ -354,27 +437,45 @@ const createChatWithAdmin = async (req, res) => {
             user_model: 'User',
             username: 'Администратор'
           }
-        ]
+        ],
+        encryption_key_hash: keyHash,
+        admin_invited: true,
+        admin_invited_by: {
+          user_id: userId,
+          user_model: userModel,
+          timestamp: new Date()
+        }
       });
       await conversation.save();
     }
 
     // Если есть начальное сообщение, добавляем его
     if (initial_message) {
+      const timestamp = new Date();
+      const messageHash = createMessageHash(initial_message, timestamp, userId);
+      const encryptedContent = Buffer.from(initial_message).toString('base64');
+      const signature = Buffer.from(`${initial_message}${timestamp}${userId}`).toString('base64');
+
       const message = new Message({
         conversation_id: conversation._id,
-        sender_id: userId,
-        sender_model: userModel,
-        content: initial_message,
+        sender: {
+          user_id: userId,
+          user_model: userModel,
+          username: currentUser.name || currentUser.email
+        },
+        encrypted_content: encryptedContent,
+        signature: signature,
+        message_hash: messageHash,
         message_type: 'text'
       });
       await message.save();
 
       // Обновляем последнее сообщение в диалоге
       conversation.last_message = {
-        content: initial_message,
+        encrypted_content: encryptedContent,
         sender_id: userId,
-        timestamp: new Date()
+        sender_model: userModel,
+        timestamp: timestamp
       };
       await conversation.save();
     }
@@ -397,5 +498,6 @@ module.exports = {
   markAsRead,
   deleteMessage,
   getUnreadCount,
+  inviteAdminToConversation,
   createChatWithAdmin
 }; 

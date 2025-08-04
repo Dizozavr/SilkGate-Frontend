@@ -17,8 +17,31 @@ const conversationSchema = new mongoose.Schema({
       required: true
     }
   }],
+  // Безопасность: админ приглашен только по запросу
+  admin_invited: {
+    type: Boolean,
+    default: false
+  },
+  admin_invited_by: {
+    user_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      refPath: 'participants.user_model'
+    },
+    user_model: {
+      type: String,
+      enum: ['Investor', 'Admin', 'Startup', 'User']
+    },
+    timestamp: {
+      type: Date
+    }
+  },
+  // Шифрование: ключ для расшифровки сообщений
+  encryption_key_hash: {
+    type: String,
+    required: true
+  },
   last_message: {
-    content: String,
+    encrypted_content: String, // Зашифрованное содержимое
     sender_id: {
       type: mongoose.Schema.Types.ObjectId,
       refPath: 'participants.user_model'

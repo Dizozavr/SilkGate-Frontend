@@ -1,182 +1,234 @@
 import React from 'react';
-
-// Функция для выбора изображения на основе ID проекта
-const getImageForProject = (projectId) => {
-  const images = [
-    'news1.jpg', 'news2.jpg', 'news3.jpg', 'news4.jpg', 'news5.jpg', 'news6.jpg',
-    'svaz-svaz-podklucit-koncepcia-setevogo-edinenia.jpg',
-    '3d-rendering-sovremennogo-nizkopoligonal-nogo-dizaina-spletenia.jpg',
-    '3d-fon-soedinenia-s-nizkopoligonal-nymi-soedinitel-nymi-liniami-i-tockami.jpg',
-    'koncepcia-noutbuka-s-interfeisom-blue-hud.jpg',
-    'koncepcia-kollaza-avatara-metavselennoi.jpg',
-    'fonovyi-kollaz-programmirovania (3).jpg',
-    'biznesmen-derzasii-cifrovoi-ekran-kotoryi-sgeneriroval-globus.jpg',
-    'fonovyi-kollaz-programmirovania (2).jpg',
-    'fonovyi-kollaz-programmirovania (1).jpg',
-    'fonovyi-kollaz-programmirovania.jpg',
-    'biznesmen-rabotausii-s-planseta-v-ofise-krupnym-planom.jpg',
-    'molodye-rabotniki-sida-v-ofise-na-tablice-i-ispol-zua-komp-ter-knizku-koncepciu-vstreci-metoda-mozgovogo-sturma-kollektivnoi-raboty.jpg',
-    'biznesmen-s-kozanym-portfelem.jpg',
-    'delovaa-gruppa-rabocaa-vstreca-koncepcia-mozgovogo-sturma.jpg',
-    'krupnym-planom-planseta-i-dokumentov-na-stole.jpg',
-    'dva-molodyh-biznesmena-imeusie-uspesnuu-vstrecu-v-restorane.jpg',
-    'celovek-daet-predstavlenie-gistogrammy-s-pomos-u-vysokotehnologicnogo-cifrovogo-pera.jpg',
-    'delovye-ludi-pozimaa-ruki.jpg',
-    'krupnym-planom-biznesmen-s-cifrovym-plansetom.jpg',
-    'gruppa-raznoobraznyh-ludei-imeusih-delovuu-vstrecu.jpg'
-  ];
-  
-  return images[(projectId - 1) % images.length];
-};
-
-// Функция для выбора изображения профиля
-const getProfileImage = (profileId) => {
-  const profileImages = [
-    'biznesmen-derzasii-cifrovoi-ekran-kotoryi-sgeneriroval-globus.jpg',
-    'biznesmen-rabotausii-s-planseta-v-ofise-krupnym-planom.jpg',
-    'biznesmen-s-kozanym-portfelem.jpg',
-    'delovye-ludi-pozimaa-ruki.jpg',
-    'krupnym-planom-biznesmen-s-cifrovym-plansetom.jpg'
-  ];
-  
-  return profileImages[(profileId - 1) % profileImages.length];
-};
-
-const projects = [
-  {
-    id: 1,
-    title: 'SilkInvest',
-    desc: 'Платформа для поиска и анализа стартапов с AI-оценкой рисков.',
-    image: `/news/${getImageForProject(1)}`,
-  },
-  {
-    id: 2,
-    title: 'GateConnect',
-    desc: 'Сервис для безопасного общения и сделок между инвесторами и стартапами.',
-    image: `/news/${getImageForProject(2)}`,
-  },
-  {
-    id: 3,
-    title: 'DealFlow',
-    desc: 'Автоматизация документооборота и подписания NDA онлайн.',
-    image: `/news/${getImageForProject(3)}`,
-  },
-];
-
-const success = [
-  {
-    id: 1,
-    name: 'Алексей Петров',
-    text: 'С помощью SilkGate мы нашли инвестора за 2 недели и успешно закрыли раунд!',
-    photo: `/news/${getProfileImage(1)}`,
-    result: '+$200K инвестиции',
-  },
-  {
-    id: 2,
-    name: 'Мария Иванова',
-    text: 'Платформа помогла быстро собрать команду и выйти на рынок.',
-    photo: `/news/${getProfileImage(2)}`,
-    result: 'Запуск за 1 месяц',
-  },
-];
-
-const partners = [
-  { 
-    id: 1, 
-    name: 'VC Group',
-    desc: 'Венчурный капитал',
-    initials: 'VC',
-    color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-  },
-  { 
-    id: 2, 
-    name: 'Startup Hub',
-    desc: 'Акселератор',
-    initials: 'SH',
-    color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
-  },
-  { 
-    id: 3, 
-    name: 'FinTech Angels',
-    desc: 'Ангельские инвесторы',
-    initials: 'FA',
-    color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
-  },
-  { 
-    id: 4, 
-    name: 'Tech Ventures',
-    desc: 'Технологические инвестиции',
-    initials: 'TV',
-    color: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)'
-  },
-  { 
-    id: 5, 
-    name: 'Innovation Lab',
-    desc: 'Инновационная лаборатория',
-    initials: 'IL',
-    color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)'
-  },
-  { 
-    id: 6, 
-    name: 'Digital Capital',
-    desc: 'Цифровые инвестиции',
-    initials: 'DC',
-    color: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)'
-  }
-];
+import Icon from '../components/Shared/Icon';
 
 export default function Products() {
+  const products = [
+    {
+      id: 1,
+      title: "Каталог стартапов",
+      description: "База данных проверенных стартапов с подробной информацией о проектах, команде и финансовых показателях.",
+      features: ["Фильтрация по отраслям", "Детальная аналитика", "Прямая связь с основателями"],
+      icon: "database",
+      category: "Для инвесторов"
+    },
+    {
+      id: 2,
+      title: "Аналитика и отчеты",
+      description: "Глубокий анализ рынка, трендов и инвестиционных возможностей с регулярными обновлениями.",
+      features: ["Рыночные тренды", "Инвестиционные раунды", "Прогнозы развития"],
+      icon: "dashboard",
+      category: "Для инвесторов"
+    },
+    {
+      id: 3,
+      title: "Платформа для питчинга",
+      description: "Инструменты для создания профессиональных презентаций и проведения онлайн-питчей.",
+      features: ["Шаблоны презентаций", "Онлайн-питчи", "Обратная связь"],
+      icon: "presentation",
+      category: "Для стартапов"
+    },
+    {
+      id: 4,
+      title: "Система управления портфелем",
+      description: "Комплексное решение для управления инвестиционным портфелем и отслеживания доходности.",
+      features: ["Отслеживание инвестиций", "Анализ доходности", "Управление рисками"],
+      icon: "chart",
+      category: "Для инвесторов"
+    },
+    {
+      id: 5,
+      title: "Маркетплейс услуг",
+      description: "Площадка для поиска и заказа профессиональных услуг для развития стартапа.",
+      features: ["Юридические услуги", "Маркетинг", "Разработка"],
+      icon: "marketplace",
+      category: "Для стартапов"
+    },
+    {
+      id: 6,
+      title: "Образовательная платформа",
+      description: "Курсы, вебинары и мастер-классы от экспертов индустрии для развития навыков.",
+      features: ["Онлайн-курсы", "Экспертные вебинары", "Сертификация"],
+      icon: "education",
+      category: "Для всех"
+    }
+  ];
+
+  const categories = [
+    { id: 'all', name: 'Все продукты' },
+    { id: 'investors', name: 'Для инвесторов' },
+    { id: 'startups', name: 'Для стартапов' },
+    { id: 'all-users', name: 'Для всех' }
+  ];
+
   return (
-    <div className="min-h-screen bg-[#10182A] py-10 px-2 sm:px-6">
-      <h1 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">Наши продукты</h1>
-      <p className="text-lg text-gray-300 mb-10 max-w-2xl">SilkGate — это экосистема сервисов для стартапов и инвесторов. Мы объединяем лучшие решения для поиска, анализа и сопровождения сделок.</p>
-
-      {/* Витрина проектов */}
-      <h2 className="text-2xl font-bold text-white mb-4">Витрина проектов</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-12">
-        {projects.map((p) => (
-          <div key={p.id} className="bg-[#1A2238] rounded-2xl shadow-lg overflow-hidden flex flex-col">
-            <div className="h-40 bg-gray-200 flex items-center justify-center">
-              <img src={p.image} alt={p.title} className="object-cover w-full h-full" />
+    <div className="min-h-screen bg-[#10182A] pt-20">
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        {/* Заголовок */}
+        <div className="mb-12">
+          <h1 className="text-3xl md:text-4xl font-light text-white mb-4">
+            Продукты и услуги
+          </h1>
+          <p className="text-lg text-muted font-light max-w-2xl leading-tight">
+            Комплексные решения для инвесторов, стартапов и всех участников экосистемы инноваций.
+          </p>
+        </div>
+        
+        {/* Статистика */}
+        <div className="grid md:grid-cols-3 gap-6 mb-12">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center">
+            <div className="flex items-center justify-center mb-4">
+              <Icon name="user" size={32} />
             </div>
-            <div className="p-5 flex-1 flex flex-col">
-              <h3 className="text-xl font-bold text-[#FFD700] mb-2">{p.title}</h3>
-              <p className="text-gray-200 mb-4 flex-1">{p.desc}</p>
-              <button className="mt-auto px-4 py-2 rounded-lg bg-[#FFD700] text-[#10182A] font-semibold hover:bg-yellow-400 transition">Подробнее</button>
+            <h3 className="text-2xl font-light text-gray-900 mb-2">1000+</h3>
+            <p className="text-gray-600 text-sm font-light leading-tight">Активных пользователей</p>
+          </div>
+          
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center">
+            <div className="flex items-center justify-center mb-4">
+              <Icon name="award" size={32} />
+            </div>
+            <h3 className="text-2xl font-light text-gray-900 mb-2">50+</h3>
+            <p className="text-gray-600 text-sm font-light leading-tight">Успешных сделок</p>
+          </div>
+          
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center">
+            <div className="flex items-center justify-center mb-4">
+              <Icon name="heart" size={32} />
+            </div>
+            <h3 className="text-2xl font-light text-gray-900 mb-2">95%</h3>
+            <p className="text-gray-600 text-sm font-light leading-tight">Довольных клиентов</p>
+          </div>
+        </div>
+        
+        {/* Продукты */}
+        <div className="grid md:grid-cols-2 gap-8">
+          {products.map((product) => (
+            <div key={product.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <div className="flex items-start gap-4 mb-4">
+                <div className="flex-shrink-0">
+                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <Icon name={product.icon} size={24} />
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="text-xl font-light text-gray-900 leading-tight">
+                      {product.title}
+                    </h3>
+                    <span className="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-light rounded-full">
+                      {product.category}
+                    </span>
+                  </div>
+                  <p className="text-gray-600 text-sm font-light leading-tight mb-4">
+                    {product.description}
+                  </p>
+                </div>
+              </div>
+              
+              {/* Функции */}
+              <div className="mb-6">
+                <h4 className="text-sm font-light text-gray-700 mb-3">Основные функции:</h4>
+                <ul className="space-y-2">
+                  {product.features.map((feature, index) => (
+                    <li key={index} className="flex items-center gap-2">
+                      <Icon name="check" size={16} className="text-green-500" />
+                      <span className="text-sm font-light text-gray-600 leading-tight">
+                        {feature}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              
+              <button className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors font-light">
+                Узнать больше
+              </button>
+            </div>
+          ))}
+        </div>
+        
+        {/* Тарифы */}
+        <div className="mt-12 bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+          <div className="flex items-center mb-6">
+            <Icon name="award" size={32} className="mr-4" />
+            <h2 className="text-xl font-light text-gray-900">Тарифные планы</h2>
+          </div>
+          <p className="text-gray-600 text-sm font-light leading-tight mb-6">
+            Выберите подходящий тариф для доступа к нашим продуктам и услугам.
+          </p>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="border border-gray-200 rounded-lg p-6">
+              <h3 className="text-lg font-light text-gray-900 mb-2">Базовый</h3>
+              <p className="text-3xl font-light text-gray-900 mb-4">Бесплатно</p>
+              <ul className="space-y-2 mb-6">
+                <li className="flex items-center gap-2">
+                  <Icon name="check" size={16} className="text-green-500" />
+                  <span className="text-sm font-light text-gray-600">Базовый доступ к каталогу</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Icon name="check" size={16} className="text-green-500" />
+                  <span className="text-sm font-light text-gray-600">Ограниченная аналитика</span>
+                </li>
+              </ul>
+              <button className="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-lg font-light">
+                Текущий план
+              </button>
+            </div>
+            
+            <div className="border-2 border-blue-600 rounded-lg p-6">
+              <h3 className="text-lg font-light text-gray-900 mb-2">Профессиональный</h3>
+              <p className="text-3xl font-light text-gray-900 mb-4">$99/мес</p>
+              <ul className="space-y-2 mb-6">
+                <li className="flex items-center gap-2">
+                  <Icon name="check" size={16} className="text-green-500" />
+                  <span className="text-sm font-light text-gray-600">Полный доступ к каталогу</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Icon name="check" size={16} className="text-green-500" />
+                  <span className="text-sm font-light text-gray-600">Расширенная аналитика</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Icon name="check" size={16} className="text-green-500" />
+                  <span className="text-sm font-light text-gray-600">Приоритетная поддержка</span>
+                </li>
+              </ul>
+              <button className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-light">
+                Выбрать план
+              </button>
+            </div>
+            
+            <div className="border border-gray-200 rounded-lg p-6">
+              <h3 className="text-lg font-light text-gray-900 mb-2">Корпоративный</h3>
+              <p className="text-3xl font-light text-gray-900 mb-4">$299/мес</p>
+              <ul className="space-y-2 mb-6">
+                <li className="flex items-center gap-2">
+                  <Icon name="check" size={16} className="text-green-500" />
+                  <span className="text-sm font-light text-gray-600">Все функции</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Icon name="check" size={16} className="text-green-500" />
+                  <span className="text-sm font-light text-gray-600">Персональный менеджер</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Icon name="check" size={16} className="text-green-500" />
+                  <span className="text-sm font-light text-gray-600">API доступ</span>
+                </li>
+              </ul>
+              <button className="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-lg font-light">
+                Связаться с нами
+              </button>
             </div>
           </div>
-        ))}
-      </div>
-
-      {/* Истории успеха */}
-      <h2 className="text-2xl font-bold text-white mb-4">Истории успеха</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
-        {success.map((s) => (
-          <div key={s.id} className="bg-[#232B45] rounded-2xl shadow p-6 flex gap-4 items-center">
-            <img src={s.photo} alt={s.name} className="w-16 h-16 rounded-full object-cover border-2 border-[#FFD700] bg-white shadow-lg" />
-            <div>
-              <div className="text-white font-semibold">{s.name}</div>
-              <div className="text-gray-300 text-sm mb-1">{s.text}</div>
-              <div className="text-[#FFD700] text-xs font-bold">{s.result}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Партнёры */}
-      <h2 className="text-2xl font-bold text-white mb-4">Партнёры</h2>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 mb-8">
-        {partners.map((p) => (
-          <div key={p.id} className="bg-white rounded-xl p-4 flex flex-col items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 min-h-[100px]">
-            <div className="w-12 h-12 rounded-full flex items-center justify-center text-white text-2xl font-bold" style={{ background: p.color }}>
-              {p.initials}
-            </div>
-            <div className="text-center">
-              <div className="text-sm font-semibold text-gray-800">{p.name}</div>
-              <div className="text-xs text-gray-500">{p.desc}</div>
-            </div>
-          </div>
-        ))}
+        </div>
+        
+        {/* Демо-информация */}
+        <div className="mt-12 p-6 bg-card border border-border rounded-lg">
+          <h3 className="text-lg font-light text-white mb-4">Демо-версия</h3>
+          <p className="text-muted text-sm font-light leading-tight">
+            Это демо-страница продуктов. В полной версии здесь будут реальные продукты с функциональностью, 
+            система тарифов и интеграция с платежными системами.
+          </p>
+        </div>
       </div>
     </div>
   );

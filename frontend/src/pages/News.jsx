@@ -1,136 +1,141 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
-
-// Функция для выбора изображения на основе ID новости
-const getImageForNews = (newsId) => {
-  const images = [
-    'news1.jpg', 'news2.jpg', 'news3.jpg', 'news4.jpg', 'news5.jpg', 'news6.jpg',
-    'svaz-svaz-podklucit-koncepcia-setevogo-edinenia.jpg',
-    '3d-rendering-sovremennogo-nizkopoligonal-nogo-dizaina-spletenia.jpg',
-    '3d-fon-soedinenia-s-nizkopoligonal-nymi-soedinitel-nymi-liniami-i-tockami.jpg',
-    'koncepcia-noutbuka-s-interfeisom-blue-hud.jpg',
-    'koncepcia-kollaza-avatara-metavselennoi.jpg',
-    'fonovyi-kollaz-programmirovania (3).jpg',
-    'biznesmen-derzasii-cifrovoi-ekran-kotoryi-sgeneriroval-globus.jpg',
-    'fonovyi-kollaz-programmirovania (2).jpg',
-    'fonovyi-kollaz-programmirovania (1).jpg',
-    'fonovyi-kollaz-programmirovania.jpg',
-    'biznesmen-rabotausii-s-planseta-v-ofise-krupnym-planom.jpg',
-    'molodye-rabotniki-sida-v-ofise-na-tablice-i-ispol-zua-komp-ter-knizku-koncepciu-vstreci-metoda-mozgovogo-sturma-kollektivnoi-raboty.jpg',
-    'biznesmen-s-kozanym-portfelem.jpg',
-    'delovaa-gruppa-rabocaa-vstreca-koncepcia-mozgovogo-sturma.jpg',
-    'krupnym-planom-planseta-i-dokumentov-na-stole.jpg',
-    'dva-molodyh-biznesmena-imeusie-uspesnuu-vstrecu-v-restorane.jpg',
-    'celovek-daet-predstavlenie-gistogrammy-s-pomos-u-vysokotehnologicnogo-cifrovogo-pera.jpg',
-    'delovye-ludi-pozimaa-ruki.jpg',
-    'krupnym-planom-biznesmen-s-cifrovym-plansetom.jpg',
-    'gruppa-raznoobraznyh-ludei-imeusih-delovuu-vstrecu.jpg'
-  ];
-  
-  if (!newsId) return images[0];
-  
-  // Используем хеш от ID для выбора изображения
-  const hash = newsId.split('').reduce((a, b) => {
-    a = ((a << 5) - a) + b.charCodeAt(0);
-    return a & a;
-  }, 0);
-  
-  return images[Math.abs(hash) % images.length];
-};
 
 export default function News() {
   const navigate = useNavigate();
-  const [news, setNews] = useState([]);
-  const [loading, setLoading] = useState(true);
+  
+  // Демо-данные новостей (одобренные админом)
+  const news = [
+    {
+      id: 1,
+      title: "Новый стартап в сфере AI привлек $10M инвестиций",
+      content: "Компания TechVision, специализирующаяся на искусственном интеллекте, успешно завершила раунд финансирования серии A. Инвестиции в размере $10 миллионов будут направлены на развитие технологий машинного обучения и расширение команды разработчиков.",
+      date: "2 часа назад",
+      image: "/news/koncepcia-noutbuka-s-interfeisom-blue-hud.jpg",
+      source: "TechCrunch",
+      category: "AI/ML"
+    },
+    {
+      id: 2,
+      title: "Рост рынка финтех-стартапов",
+      content: "Аналитики прогнозируют увеличение инвестиций в финтех-сектор на 25% в следующем году. Согласно последним исследованиям, рынок финтех-стартапов показывает стабильный рост, привлекая внимание как частных, так и институциональных инвесторов.",
+      date: "4 часа назад",
+      image: "/news/3d-rendering-sovremennogo-nizkopoligonal-nogo-dizaina-spletenia.jpg",
+      source: "Forbes",
+      category: "FinTech"
+    },
+    {
+      id: 3,
+      title: "Новые возможности для инвесторов",
+      content: "Платформа запускает новые инструменты для анализа и управления инвестиционным портфелем. В рамках обновления системы инвесторы получат доступ к расширенной аналитике, персональным рекомендациям и автоматизированным инструментам управления рисками.",
+      date: "6 часов назад",
+      image: "/news/svaz-svaz-podklucit-koncepcia-setevogo-edinenia.jpg",
+      source: "SilkGate",
+      category: "Платформа"
+    },
+    {
+      id: 4,
+      title: "Стартап ИИ привлекает млн в посевном раунде",
+      content: "Многообещающий стартап ИИ успешно привлек млн в посевном финансировании. Компания специализируется на разработке инновационных решений машинного обучения для корпоративных клиентов. Это финансирование поможет ускорить разработку продукта и расширить команду.",
+      date: "1 день назад",
+      image: "/news/3d-fon-soedinenia-s-nizkopoligonal-nymi-soedinitel-nymi-liniami-i-tockami.jpg",
+      source: "TechCrunch",
+      category: "AI/ML"
+    },
+    {
+      id: 5,
+      title: "Блокчейн-стартап получил $5M инвестиций",
+      content: "Инновационный блокчейн-стартап привлек $5 миллионов в раунде финансирования. Компания разрабатывает децентрализованные решения для финансового сектора, что привлекло внимание крупных инвесторов.",
+      date: "2 дня назад",
+      image: "/news/koncepcia-kollaza-avatara-metavselennoi.jpg",
+      source: "CoinDesk",
+      category: "Blockchain"
+    },
+    {
+      id: 6,
+      title: "Новые тренды в EdTech индустрии",
+      content: "Образовательные технологии переживают бум инвестиций. Стартапы в сфере EdTech привлекают рекордные суммы, так как спрос на онлайн-образование продолжает расти.",
+      date: "3 дня назад",
+      image: "/news/fonovyi-kollaz-programmirovania (3).jpg",
+      source: "EdTech Weekly",
+      category: "EdTech"
+    }
+  ];
 
-
-  useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/api/news/published');
-        if (response.ok) {
-          const data = await response.json();
-          setNews(data.news || []);
-        }
-      } catch (error) {
-        console.error('Error fetching news:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchNews();
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#10182A] py-10 px-2 sm:px-6">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">Блог / Новости</h1>
-          <p className="text-lg text-gray-300 mb-10 max-w-2xl">Последние новости и обновления SilkGate.</p>
-          <div className="flex justify-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#FFD700]"></div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const handleNewsClick = (newsId) => {
+    navigate(`/news/${newsId}`);
+  };
 
   return (
-    <div className="min-h-screen bg-[#10182A] py-10 px-2 sm:px-6">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">Блог / Новости</h1>
-        <p className="text-lg text-gray-300 mb-10 max-w-2xl">Последние новости и обновления SilkGate.</p>
+    <div className="min-h-screen bg-[#10182A] pt-20">
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        {/* Заголовок */}
+        <div className="mb-12">
+          <h1 className="text-3xl md:text-4xl font-light text-white mb-4">
+            Блог / Новости
+          </h1>
+          <p className="text-lg text-muted font-light max-w-2xl">
+            Последние новости и обновления SilkGate. Все публикации проходят модерацию и одобрение администратора.
+          </p>
+        </div>
         
-        {news.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-gray-400 text-lg">Новости пока не опубликованы</p>
-          </div>
-        ) : (
-          <div className="grid gap-6">
-            {news.map((item) => (
-              <div 
-                key={item._id} 
-                className="bg-white rounded-lg shadow-sm border p-6 hover:shadow-md transition-shadow cursor-pointer"
-                onClick={() => navigate(`/news/${item._id}`)}
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex-1">
-                    <h2 className="text-xl font-bold text-gray-900 mb-2 hover:text-blue-600 transition-colors">
-                      {item.title.translated}
-                    </h2>
-                    <p className="text-gray-600 mb-3 line-clamp-4">
-                      {item.content.translated}
-                    </p>
+        {/* Список новостей */}
+        <div className="grid gap-8">
+          {news.map((item) => (
+            <div 
+              key={item.id} 
+              className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
+              onClick={() => handleNewsClick(item.id)}
+            >
+              <div className="flex items-start gap-6">
+                {/* Изображение */}
+                <div className="flex-shrink-0">
+                  <div className="w-32 h-32 rounded-lg overflow-hidden">
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
-                  <img 
-                    src={`/news/${getImageForNews(item._id)}`}
-                    alt={item.title.translated}
-                    className="w-24 h-24 object-cover rounded-lg ml-4"
-                  />
                 </div>
                 
-                <div className="flex items-center justify-between text-sm text-gray-500">
-                  <div className="flex items-center gap-4">
-                    <span className="font-medium">{item.source.name}</span>
-                    <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">
-                      {item.category}
+                {/* Контент */}
+                <div className="flex-1 min-w-0">
+                  <h2 className="text-xl font-light text-gray-900 mb-3 leading-tight">
+                    {item.title}
+                  </h2>
+                  <p className="text-gray-600 text-sm font-light leading-tight mb-4">
+                    {item.content}
+                  </p>
+                  
+                  {/* Метаданные */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <span className="text-sm font-light text-gray-500">
+                        {item.source}
+                      </span>
+                      <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-light rounded-full">
+                        {item.category}
+                      </span>
+                    </div>
+                    <span className="text-sm font-light text-gray-500">
+                      {item.date}
                     </span>
                   </div>
-                  <span>
-                    {new Date(item.publishedAt || item.createdAt).toLocaleDateString('ru-RU', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric'
-                    })}
-                  </span>
                 </div>
               </div>
-            ))}
-          </div>
-        )}
+            </div>
+          ))}
+        </div>
+        
+        {/* Демо-информация */}
+        <div className="mt-12 p-6 bg-card border border-border rounded-lg">
+          <h3 className="text-lg font-light text-white mb-4">Демо-версия</h3>
+          <p className="text-muted text-sm font-light leading-tight">
+            Это демо-страница со списком всех одобренных новостей. В полной версии здесь будут отображаться новости, 
+            которые прошли модерацию администратора. Каждая новость кликабельна и ведет на страницу с полным содержанием.
+          </p>
+        </div>
       </div>
     </div>
   );

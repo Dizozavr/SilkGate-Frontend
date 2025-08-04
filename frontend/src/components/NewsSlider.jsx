@@ -127,15 +127,14 @@ export default function NewsSlider() {
   }, []);
 
   return (
-    <section className="w-full max-w-6xl mx-auto mt-16">
+    <section className="w-full max-w-4xl mx-auto mt-16">
       <div className="flex items-center justify-between mb-4 px-2">
         <h2
-          className="text-xl md:text-2xl text-white font-bold"
-          style={{ fontFamily: "'Playfair Display', serif", lineHeight: 1.1 }}
+          className="text-xl md:text-2xl text-white font-bold font-light"
         >
           Новости
         </h2>
-        <a href="/news" className="text-[#FFD700] font-medium hover:underline text-xs md:text-sm" style={{ fontFamily: 'Inter, Arial, sans-serif' }}>Все новости →</a>
+        <a href="/news" className="text-[#FFD700] font-medium hover:underline text-xs md:text-sm font-light">Все новости →</a>
       </div>
       <div
         className="relative"
@@ -187,22 +186,20 @@ export default function NewsSlider() {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#10182A]/80 via-[#10182A]/40 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-4">
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs text-gray-300 font-medium" style={{ fontFamily: 'Inter, Arial, sans-serif' }}>
+                    <span className="text-xs text-gray-300 font-medium font-light">
                       {item.publishedAt ? new Date(item.publishedAt).toLocaleDateString('ru-RU') : 'Сегодня'}
                     </span>
-                    <span className="text-xs text-[#FFD700] font-medium" style={{ fontFamily: 'Inter, Arial, sans-serif' }}>
+                    <span className="text-xs text-[#FFD700] font-medium font-light">
                       {item.source?.name || 'SilkGate'}
                     </span>
                   </div>
                   <h3
-                    className="mb-2 text-lg font-bold text-white leading-tight text-left"
-                    style={{ fontFamily: "'Playfair Display', serif", lineHeight: 1.05 }}
+                    className="mb-2 text-lg font-bold text-white leading-tight text-left font-light"
                   >
                     {item.title?.translated || 'Новость'}
                   </h3>
                   <p
-                    className="text-sm text-gray-300 leading-tight text-left line-clamp-3"
-                    style={{ fontFamily: 'Inter, Arial, sans-serif', fontWeight: 400 }}
+                    className="text-sm text-gray-300 leading-tight text-left line-clamp-3 font-light"
                   >
                     {item.content?.translated || 'Описание новости...'}
                   </p>
