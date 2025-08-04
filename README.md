@@ -1,18 +1,8 @@
-# SilkGate
+# SilkGate Frontend
 
-SilkGate is a private startup and investor platform focused on secure, confidential connections between high-potential startups and verified investors. The platform features robust authentication, admin approval, and a clean, modern interface.
+This folder contains the React + TailwindCSS frontend for SilkGate. It provides registration forms, dashboards, and the admin panel with a clean, modern UI.
 
-## Tech Stack
-- Frontend: React, TailwindCSS, React Router
-- Backend: Node.js, Express
-- Database: MongoDB Atlas
-- Auth: JWT
-- Email: Nodemailer
-
-## Main Features
-- Startup and investor registration with email verification
-- Admin panel for approvals
-- Secure dashboards for investors and startups
-
-## Getting Started
-See the `backend/` and `frontend/` folders for setup instructions. 
+- Registration and login pages
+- Investor and admin dashboards
+- Protected routes
+- Responsive design 
