@@ -1,0 +1,32 @@
+{
+    "mcpServers": {
+      "context7": {
+        "command": "npx",
+        "args": ["-y", "@upstash/context7-mcp@latest"]
+      },
+      "sequential-thinking": {
+        "command": "npx",
+        "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
+      },
+      "playwright": {
+        "command": "npx",
+        "args": ["-y", "@executeautomation/playwright-mcp-server"]
+      },
+      "imagegen": {
+        "command": "powershell",
+        "args": [
+          "-Command",
+          "$env:OPENAI_API_KEY='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'; npx -y imagegen-mcp"
+        ]
+      },
+      "brave-search": {
+        "command": "npx",
+        "args": ["-y", "brave-search-mcp"]
+      },
+      "gitops": {
+        "command": "npx",
+        "args": ["-y", "gitops-mcp"]
+      }
+    }
+  }
+  
