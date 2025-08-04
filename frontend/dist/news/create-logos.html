@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Logo Generator for Partners</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #10182A;
+            color: white;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .logo-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+        .company-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .company-desc {
+            font-size: 12px;
+            color: #666;
+        }
+        .btn {
+            background: #FFD700;
+            color: #10182A;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 10px 5px;
+        }
+        .btn:hover {
+            background: #FFC700;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎨 Logo Generator for Partners</h1>
+        <p>Generate simple logos for partner companies</p>
+        <button class="btn" onclick="downloadAll()">📥 Download All Logos</button>
+    </div>
+
+    <div class="container" id="container">
+        <!-- Logos will be generated here -->
+    </div>
+
+    <script>
+        const partners = [
+            { name: 'VC Group', desc: 'Венчурный капитал', color: '#667eea' },
+            { name: 'Startup Hub', desc: 'Акселератор', color: '#f093fb' },
+            { name: 'FinTech Angels', desc: 'Ангельские инвесторы', color: '#4facfe' },
+            { name: 'Tech Ventures', desc: 'Технологические инвестиции', color: '#43e97b' },
+            { name: 'Innovation Lab', desc: 'Инновационная лаборатория', color: '#fa709a' },
+            { name: 'Digital Capital', desc: 'Цифровые инвестиции', color: '#a8edea' }
+        ];
+
+        function generateLogos() {
+            const container = document.getElementById('container');
+            container.innerHTML = '';
+
+            partners.forEach((partner, index) => {
+                const card = document.createElement('div');
+                card.className = 'logo-card';
+                
+                const initials = partner.name.split(' ').map(word => word[0]).join('');
+                
+                card.innerHTML = `
+                    <div class="logo" style="background: ${partner.color}">
+                        ${initials}
+                    </div>
+                    <div class="company-name">${partner.name}</div>
+                    <div class="company-desc">${partner.desc}</div>
+                    <button class="btn" onclick="downloadLogo(${index})">Download</button>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        function downloadLogo(index) {
+            const partner = partners[index];
+            const canvas = document.createElement('canvas');
+            canvas.width = 200;
+            canvas.height = 200;
+            const ctx = canvas.getContext('2d');
+
+            // Background
+            ctx.fillStyle = partner.color;
+            ctx.beginPath();
+            ctx.arc(100, 100, 80, 0, 2 * Math.PI);
+            ctx.fill();
+
+            // Text
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 48px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            const initials = partner.name.split(' ').map(word => word[0]).join('');
+            ctx.fillText(initials, 100, 100);
+
+            // Download
+            const link = document.createElement('a');
+            link.download = `${partner.name.toLowerCase().replace(' ', '-')}-logo.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+
+        function downloadAll() {
+            partners.forEach((partner, index) => {
+                setTimeout(() => downloadLogo(index), index * 100);
+            });
+        }
+
+        // Initialize
+        generateLogos();
+    </script>
+</body>
+</html> 
