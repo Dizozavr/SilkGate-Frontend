@@ -1,7 +1,7 @@
 {
   "scripts": {
     "dev": "vite",
-    "build": "mkdir -p dist && cp -r src/* dist/ && cp index.html dist/ && echo 'Static build completed'",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "devDependencies": {
